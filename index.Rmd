@@ -1,0 +1,82 @@
+--- 
+title: "My Report"
+author: |
+ |
+ | Prepared for
+
+ |
+ |
+ | Prepared by
+ | Al Irvine, B.Sc., R.P.Bio.
+ | New Graph Environment
+
+date: |
+ |
+ | Version 0.0.1
+ | `r format(Sys.Date(), "%Y-%m-%d")`
+toc-title: Table of Contents
+site: bookdown::bookdown_site
+output: bookdown::gitbook
+nocite: |
+
+documentclass: book
+bibliography: [book.bib, packages.bib]
+biblio-style: apalike
+link-citations: no
+github-repo: rstudio/bookdown-demo
+description: "My Description."
+
+---
+
+
+```{r setup, include = TRUE, echo =FALSE, message=FALSE, warning=FALSE}
+gitbook_on <- TRUE
+# gitbook_on <- FALSE  ##we just need turn  this on and off to switch between gitbook and pdf via paged.js
+
+
+knitr::opts_chunk$set(echo=FALSE, message=FALSE, warning=FALSE, dpi=60, out.width = "100%")
+options(scipen=999)
+options(knitr.kable.NA = '--') #'--'
+options(knitr.kable.NAN = '--')
+
+
+
+```
+
+```{r settings-gitbook, eval= gitbook_on}
+photo_width <- "100%"
+font_set <- 11
+
+```
+
+```{r settings-paged-html, eval= identical(gitbook_on, FALSE)}
+photo_width <- "80%"
+font_set <- 9
+```
+
+
+```{r}
+source('R/packages.R')
+# source('R/functions.R')
+```
+
+
+```{r include=FALSE}
+# automatically create a bib database for R packages
+knitr::write_bib(c(
+  .packages(), 'bookdown', 'knitr', 'rmarkdown'
+), 'packages.bib')
+```
+
+# Acknowledgement {.front-matter .unnumbered}
+
+
+Modern civilization has a long journey ahead to acknowledge and address the historic and ongoing impacts of colonialism that have resulted in harm to the ecosystems in Northern British Columbia.  That harm naturally extends to the cultures and livelihoods of those that have lived in harmony with the Yintahk/Laxyip (land) for many thousands of years.
+
+
+
+```{js, logo-header, echo = FALSE, eval= T}
+title=document.getElementById('header');
+title.innerHTML = '<img src="fig/logo.png" alt="NewGraph">' + title.innerHTML
+```
+
