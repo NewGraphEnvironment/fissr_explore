@@ -16,7 +16,10 @@ date: |
  | `r format(Sys.Date(), "%Y-%m-%d")`
 toc-title: Table of Contents
 site: bookdown::bookdown_site
-output: bookdown::gitbook
+output: 
+  bookdown::gitbook:
+          includes:
+            in_header: header.html
 nocite: |
 
 documentclass: book
@@ -34,7 +37,7 @@ gitbook_on <- TRUE
 # gitbook_on <- FALSE  ##we just need turn  this on and off to switch between gitbook and pdf via paged.js
 
 
-knitr::opts_chunk$set(echo=FALSE, message=FALSE, warning=FALSE, dpi=60, out.width = "100%")
+knitr::opts_chunk$set(echo=T, message=FALSE, warning=FALSE, dpi=60, out.width = "100%")
 options(scipen=999)
 options(knitr.kable.NA = '--') #'--'
 options(knitr.kable.NAN = '--')
@@ -56,8 +59,9 @@ font_set <- 9
 
 
 ```{r}
+source('R/private_info.R')
 source('R/packages.R')
-# source('R/functions.R')
+source('R/functions.R')
 ```
 
 
@@ -71,7 +75,7 @@ knitr::write_bib(c(
 # Acknowledgement {.front-matter .unnumbered}
 
 
-Modern civilization has a long journey ahead to acknowledge and address the historic and ongoing impacts of colonialism that have resulted in harm to the ecosystems in Northern British Columbia.  That harm naturally extends to the cultures and livelihoods of those that have lived in harmony with the Yintahk/Laxyip (land) for many thousands of years.
+Modern civilization has a long journey ahead to acknowledge and address the historic and ongoing impacts of colonialism that have resulted in harm to  ecosystems on Turtle Island.  That harm naturally extends to the cultures and livelihoods of those that have lived in harmony with the Yintahk/Laxyip (land) for many thousands of years.
 
 
 
