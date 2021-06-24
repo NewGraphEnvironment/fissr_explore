@@ -75,7 +75,7 @@ knitr::write_bib(c(
 # Acknowledgement {.front-matter .unnumbered}
 
 
-Modern civilization has a long journey ahead to acknowledge and address the historic and ongoing impacts of colonialism that have resulted in harm to  ecosystems on Turtle Island.  That harm naturally extends to the cultures and livelihoods of those that have lived in harmony with the Yintahk/Laxyip (land) for many thousands of years.
+Modern civilization has a long journey ahead to acknowledge and address the historic and ongoing impacts of colonialism that have resulted in harm to  ecosystems on Turtle Island.  That harm naturally extends to the cultures and livelihoods of those that have lived in harmony with the land for many thousands of years.
 
 
 
@@ -88,130 +88,10 @@ title.innerHTML = '<img src="fig/logo.png" alt="NewGraph">' + title.innerHTML
 <!--chapter:end:index.Rmd-->
 
 
-
 # FWA Streams
 
-Load the double line streams used in channel_width_mapped
+Placeholder
 
-
-```{r}
-
-
-##gconnect to database
-conn <- DBI::dbConnect(
-  RPostgres::Postgres(),
-  dbname = dbname_wsl,
-  host = host_wsl,
-  port = port_wsl,
-  user = user_wsl,
-  password = password_wsl
-)
-
-
-
-##get the segments that have a centreline (double line streams)
-q <- ("SELECT linear_feature_id, ceil(upstream_route_measure)::integer - floor(downstream_route_measure)::integer AS len,
-      watershed_group_code
-      FROM whse_basemapping.fwa_stream_networks_sp 
-      WHERE edge_type = 1250")
-
-streams <- sf::st_read(conn, query = q) 
-
-```
-```{r}
-summary(streams$len)
-
-```
-
-
-Lets look at distribution of lengths
-```{r}
-ggplot(select(streams, len), aes(x=len)) +
-  geom_histogram(position="identity", size = 0.75)+
-  labs(x = "length", y = "#") +
-  ggdark::dark_theme_bw(base_size = 11)
-
-```
-
-
-```{r}
-##segments less than 1000m long
-ggplot(select(streams, len) %>% filter(len < 1000), aes(x=len)) +
-  geom_histogram(position="identity", size = 0.75)+
-  labs(x = "length", y = "#") +
-  ggdark::dark_theme_bw(base_size = 11)
-```
-
-```{r}
-##segments less than 250m long
-ggplot(select(streams, len) %>% filter(len < 250), aes(x=len)) +
-  geom_histogram(position="identity", size = 0.75)+
-  labs(x = "length", y = "#") +
-  ggdark::dark_theme_bw(base_size = 11)
-```
-
-```{r}
-##how many streams are segments are smaller than 50m
-streams %>% 
-  filter(len > 1000) %>% 
-  count()
-```
-
-```{r}
-streams_equal <- streams %>% 
-  mutate(cut = cut_number(len, n = 5)) %>% 
-  group_by(cut) %>% 
-  summarise(n = n())
-
-streams_equal
-
-
-
-
-```
-
-```{r}
-streams_interval <- streams %>% 
-  mutate(cut = cut_interval(len, n = 10)) %>% 
-  group_by(cut) %>% 
-  summarise(n = n())
-
-streams_interval
-```
-
-```{r}
-streams_length <- streams %>%
-  mutate(cut =
-           case_when(
-             len < 100 ~ '0_100',
-             len >= 100 & len < 500 ~ '0100_500',
-             len >= 500 & len < 999 ~ '0500_1000',
-             len >=999  ~ '1000+')) 
-
-streams_length_sum <- streams_length %>% 
-  group_by(cut) %>% 
-  summarise(n = n())
-
-streams_length_sum
-```
-
-
-```{r}
-ggplot(data = streams_length_sum, mapping = aes(x=cut, y = n)) + 
-  geom_bar(stat = "identity") + 
-  # ylim(1000, 20000)+
-  # labs(x='test') +
-  ggdark::dark_theme_bw(base_size = 11)
-```
-
-
-```{r}
-ggplot(streams_length, aes(x=len)) +
-  geom_histogram(position="identity", size = 0.75)+
-  labs(x = "length", y = "#") +
-  facet_wrap(~cut, ncol = 2, scales = "free")+
-  ggdark::dark_theme_bw(base_size = 11)
-```
 
 
 <!--chapter:end:0110-fwa.Rmd-->
