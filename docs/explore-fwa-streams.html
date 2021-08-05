@@ -210,10 +210,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb4-20"><a href="explore-fwa-streams.html#cb4-20" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb4-21"><a href="explore-fwa-streams.html#cb4-21" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb4-22"><a href="explore-fwa-streams.html#cb4-22" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-23"><a href="explore-fwa-streams.html#cb4-23" aria-hidden="true" tabindex="-1"></a><span class="do">## In order to facilitate reproducability lets save the streams in a sqlite and pull them back in.</span></span>
+<span id="cb4-23"><a href="explore-fwa-streams.html#cb4-23" aria-hidden="true" tabindex="-1"></a><span class="do">##  the streams in a sqlite and pull them back in.</span></span>
 <span id="cb4-24"><a href="explore-fwa-streams.html#cb4-24" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb4-25"><a href="explore-fwa-streams.html#cb4-25" aria-hidden="true" tabindex="-1"></a><span class="do">##########################!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!#########################</span></span>
-<span id="cb4-26"><a href="explore-fwa-streams.html#cb4-26" aria-hidden="true" tabindex="-1"></a><span class="do">###change this up so that it matches your version of the dropbox!</span></span>
+<span id="cb4-26"><a href="explore-fwa-streams.html#cb4-26" aria-hidden="true" tabindex="-1"></a><span class="do">###change this up so that it matches your version of the ahred dropbox!</span></span>
 <span id="cb4-27"><a href="explore-fwa-streams.html#cb4-27" aria-hidden="true" tabindex="-1"></a>shared_dropbox_dir <span class="ot">&lt;-</span> <span class="st">&quot;C:/Users/al/Dropbox/New Graph/&quot;</span></span>
 <span id="cb4-28"><a href="explore-fwa-streams.html#cb4-28" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb4-29"><a href="explore-fwa-streams.html#cb4-29" aria-hidden="true" tabindex="-1"></a></span>
@@ -228,7 +228,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb4-38"><a href="explore-fwa-streams.html#cb4-38" aria-hidden="true" tabindex="-1"></a>readwritesqlite<span class="sc">::</span><span class="fu">rws_disconnect</span>(conn)</span></code></pre></div>
 <p>Load the streams from sqlite. The table I pull back in after saving as <code>sqlite</code> has <code>linear_feature_id</code> as integer vs int64 as it was pulled from <code>postgres</code>. No issues for this exercise though…</p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="explore-fwa-streams.html#cb5-1" aria-hidden="true" tabindex="-1"></a>conn <span class="ot">&lt;-</span> readwritesqlite<span class="sc">::</span><span class="fu">rws_connect</span>(<span class="fu">paste0</span>(shared_dropbox_dir, <span class="st">&quot;fiss/fissr_explore.sqlite&quot;</span>))</span>
-<span id="cb5-2"><a href="explore-fwa-streams.html#cb5-2" aria-hidden="true" tabindex="-1"></a>streams2 <span class="ot">&lt;-</span> readwritesqlite<span class="sc">::</span><span class="fu">rws_read_table</span>(<span class="st">&quot;whse_basemapping.fwa_stream_networks_sp&quot;</span>, <span class="at">conn =</span> conn)</span></code></pre></div>
+<span id="cb5-2"><a href="explore-fwa-streams.html#cb5-2" aria-hidden="true" tabindex="-1"></a>streams2 <span class="ot">&lt;-</span> readwritesqlite<span class="sc">::</span><span class="fu">rws_read_table</span>(<span class="st">&quot;whse_basemapping.fwa_stream_networks_sp&quot;</span>, <span class="at">conn =</span> conn)</span>
+<span id="cb5-3"><a href="explore-fwa-streams.html#cb5-3" aria-hidden="true" tabindex="-1"></a>readwritesqlite<span class="sc">::</span><span class="fu">rws_disconnect</span>(conn)</span></code></pre></div>
 <div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="explore-fwa-streams.html#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(streams<span class="sc">$</span>len)</span></code></pre></div>
 <pre><code>##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
 ##     1.0    86.0   181.0   294.5   362.0  9253.0</code></pre>
@@ -237,19 +238,19 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb8-2"><a href="explore-fwa-streams.html#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="at">position=</span><span class="st">&quot;identity&quot;</span>, <span class="at">size =</span> <span class="fl">0.75</span>)<span class="sc">+</span></span>
 <span id="cb8-3"><a href="explore-fwa-streams.html#cb8-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;length&quot;</span>, <span class="at">y =</span> <span class="st">&quot;#&quot;</span>) <span class="sc">+</span></span>
 <span id="cb8-4"><a href="explore-fwa-streams.html#cb8-4" aria-hidden="true" tabindex="-1"></a>  ggdark<span class="sc">::</span><span class="fu">dark_theme_bw</span>(<span class="at">base_size =</span> <span class="dv">11</span>)</span></code></pre></div>
-<p><img src="Template_files/figure-html/unnamed-chunk-20-1.png" width="100%" /></p>
+<p><img src="Template_files/figure-html/unnamed-chunk-6-1.png" width="100%" /></p>
 <div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="explore-fwa-streams.html#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="do">##segments less than 1000m long</span></span>
 <span id="cb9-2"><a href="explore-fwa-streams.html#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="fu">select</span>(streams, len) <span class="sc">%&gt;%</span> <span class="fu">filter</span>(len <span class="sc">&lt;</span> <span class="dv">1000</span>), <span class="fu">aes</span>(<span class="at">x=</span>len)) <span class="sc">+</span></span>
 <span id="cb9-3"><a href="explore-fwa-streams.html#cb9-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="at">position=</span><span class="st">&quot;identity&quot;</span>, <span class="at">size =</span> <span class="fl">0.75</span>)<span class="sc">+</span></span>
 <span id="cb9-4"><a href="explore-fwa-streams.html#cb9-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;length&quot;</span>, <span class="at">y =</span> <span class="st">&quot;#&quot;</span>) <span class="sc">+</span></span>
 <span id="cb9-5"><a href="explore-fwa-streams.html#cb9-5" aria-hidden="true" tabindex="-1"></a>  ggdark<span class="sc">::</span><span class="fu">dark_theme_bw</span>(<span class="at">base_size =</span> <span class="dv">11</span>)</span></code></pre></div>
-<p><img src="Template_files/figure-html/unnamed-chunk-21-1.png" width="100%" /></p>
+<p><img src="Template_files/figure-html/unnamed-chunk-7-1.png" width="100%" /></p>
 <div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="explore-fwa-streams.html#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="do">##segments less than 250m long</span></span>
 <span id="cb10-2"><a href="explore-fwa-streams.html#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="fu">select</span>(streams, len) <span class="sc">%&gt;%</span> <span class="fu">filter</span>(len <span class="sc">&lt;</span> <span class="dv">250</span>), <span class="fu">aes</span>(<span class="at">x=</span>len)) <span class="sc">+</span></span>
 <span id="cb10-3"><a href="explore-fwa-streams.html#cb10-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="at">position=</span><span class="st">&quot;identity&quot;</span>, <span class="at">size =</span> <span class="fl">0.75</span>)<span class="sc">+</span></span>
 <span id="cb10-4"><a href="explore-fwa-streams.html#cb10-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;length&quot;</span>, <span class="at">y =</span> <span class="st">&quot;#&quot;</span>) <span class="sc">+</span></span>
 <span id="cb10-5"><a href="explore-fwa-streams.html#cb10-5" aria-hidden="true" tabindex="-1"></a>  ggdark<span class="sc">::</span><span class="fu">dark_theme_bw</span>(<span class="at">base_size =</span> <span class="dv">11</span>)</span></code></pre></div>
-<p><img src="Template_files/figure-html/unnamed-chunk-22-1.png" width="100%" /></p>
+<p><img src="Template_files/figure-html/unnamed-chunk-8-1.png" width="100%" /></p>
 <div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="explore-fwa-streams.html#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="do">##how many streams are segments are smaller than 50m</span></span>
 <span id="cb11-2"><a href="explore-fwa-streams.html#cb11-2" aria-hidden="true" tabindex="-1"></a>streams <span class="sc">%&gt;%</span> </span>
 <span id="cb11-3"><a href="explore-fwa-streams.html#cb11-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(len <span class="sc">&gt;</span> <span class="dv">1000</span>) <span class="sc">%&gt;%</span> </span>
@@ -314,13 +315,13 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb19-3"><a href="explore-fwa-streams.html#cb19-3" aria-hidden="true" tabindex="-1"></a>  <span class="co"># ylim(1000, 20000)+</span></span>
 <span id="cb19-4"><a href="explore-fwa-streams.html#cb19-4" aria-hidden="true" tabindex="-1"></a>  <span class="co"># labs(x=&#39;test&#39;) +</span></span>
 <span id="cb19-5"><a href="explore-fwa-streams.html#cb19-5" aria-hidden="true" tabindex="-1"></a>  ggdark<span class="sc">::</span><span class="fu">dark_theme_bw</span>(<span class="at">base_size =</span> <span class="dv">11</span>)</span></code></pre></div>
-<p><img src="Template_files/figure-html/unnamed-chunk-27-1.png" width="100%" /></p>
+<p><img src="Template_files/figure-html/unnamed-chunk-13-1.png" width="100%" /></p>
 <div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="explore-fwa-streams.html#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(streams_length, <span class="fu">aes</span>(<span class="at">x=</span>len)) <span class="sc">+</span></span>
 <span id="cb20-2"><a href="explore-fwa-streams.html#cb20-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="at">position=</span><span class="st">&quot;identity&quot;</span>, <span class="at">size =</span> <span class="fl">0.75</span>)<span class="sc">+</span></span>
 <span id="cb20-3"><a href="explore-fwa-streams.html#cb20-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;length&quot;</span>, <span class="at">y =</span> <span class="st">&quot;#&quot;</span>) <span class="sc">+</span></span>
 <span id="cb20-4"><a href="explore-fwa-streams.html#cb20-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>cut, <span class="at">ncol =</span> <span class="dv">2</span>, <span class="at">scales =</span> <span class="st">&quot;free&quot;</span>)<span class="sc">+</span></span>
 <span id="cb20-5"><a href="explore-fwa-streams.html#cb20-5" aria-hidden="true" tabindex="-1"></a>  ggdark<span class="sc">::</span><span class="fu">dark_theme_bw</span>(<span class="at">base_size =</span> <span class="dv">11</span>)</span></code></pre></div>
-<p><img src="Template_files/figure-html/unnamed-chunk-28-1.png" width="100%" /></p>
+<p><img src="Template_files/figure-html/unnamed-chunk-14-1.png" width="100%" /></p>
 
 </div>
             </section>

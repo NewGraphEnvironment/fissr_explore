@@ -1,5 +1,5 @@
 --- 
-title: "My Report"
+title: "Linking Fish Density to Habitat Characteristics"
 author: |
  |
  | Prepared for
@@ -7,8 +7,7 @@ author: |
  |
  |
  | Prepared by
- | Al Irvine, B.Sc., R.P.Bio.
- | New Graph Environment
+
 
 date: |
  |

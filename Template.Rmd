@@ -1,5 +1,5 @@
 --- 
-title: "My Report"
+title: "Linking Fish Density to Habitat Characteristics"
 author: |
  |
  | Prepared for
@@ -7,8 +7,7 @@ author: |
  |
  |
  | Prepared by
- | Al Irvine, B.Sc., R.P.Bio.
- | New Graph Environment
+
 
 date: |
  |
@@ -88,11 +87,448 @@ title.innerHTML = '<img src="fig/logo.png" alt="NewGraph">' + title.innerHTML
 <!--chapter:end:index.Rmd-->
 
 
-# FWA Streams
 
-Placeholder
+# Explore FWA Streams
+Purpose of this section was to explore the lengths and frequencies of double lined streams as there is a channel width predictor model `channel-width-21`.  Result of this work was that Simon has sampled each double line stream 30 times and kept the average and standard deviation - regarless of segment length [`bcfishpass`](https://github.com/smnorris/bcfishpass/tree/main/01_prep/habitat/02_channel_width).
 
+
+Load the double line streams used in channel_width_mapped.  In order to facilitate reproducability lets save the streams in a sqlite and pull them back in.
+
+
+```{r eval=FALSE}
+
+
+##gconnect to database
+conn <- DBI::dbConnect(
+  RPostgres::Postgres(),
+  dbname = dbname_wsl,
+  host = host_wsl,
+  port = port_wsl,
+  user = user_wsl,
+  password = password_wsl
+)
+
+
+
+##get the segments that have a centreline (double line streams)
+q <- ("SELECT linear_feature_id, ceil(upstream_route_measure)::integer - floor(downstream_route_measure)::integer AS len,
+      watershed_group_code
+      FROM whse_basemapping.fwa_stream_networks_sp 
+      WHERE edge_type = 1250")
+
+streams <- sf::st_read(conn, query = q) 
+
+
+
+##  the streams in a sqlite and pull them back in.
+
+##########################!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!#########################
+###change this up so that it matches your version of the ahred dropbox!
+shared_dropbox_dir <- "C:/Users/al/Dropbox/New Graph/"
+
+
+
+mydb <- DBI::dbConnect(RSQLite::SQLite(), paste0(shared_dropbox_dir, "fiss/fissr_explore.sqlite"))
+
+
+conn <- readwritesqlite::rws_connect(paste0(shared_dropbox_dir, "fiss/fissr_explore.sqlite"))
+readwritesqlite::rws_write(streams, exists = F, delete = TRUE,
+          conn = conn, x_name = "whse_basemapping.fwa_stream_networks_sp")
+readwritesqlite::rws_list_tables(conn)
+readwritesqlite::rws_disconnect(conn)
+```
+
+
+Load the streams from sqlite.  The table I pull back in after saving as `sqlite` has `linear_feature_id` as integer vs int64 as it was pulled from `postgres`. No issues for this exercise though...
+
+```{r}
+conn <- readwritesqlite::rws_connect(paste0(shared_dropbox_dir, "fiss/fissr_explore.sqlite"))
+streams2 <- readwritesqlite::rws_read_table("whse_basemapping.fwa_stream_networks_sp", conn = conn)
+readwritesqlite::rws_disconnect(conn)
+```
+
+```{r}
+summary(streams$len)
+
+```
+
+
+Lets look at distribution of lengths
+```{r}
+ggplot(select(streams, len), aes(x=len)) +
+  geom_histogram(position="identity", size = 0.75)+
+  labs(x = "length", y = "#") +
+  ggdark::dark_theme_bw(base_size = 11)
+
+```
+
+
+```{r}
+##segments less than 1000m long
+ggplot(select(streams, len) %>% filter(len < 1000), aes(x=len)) +
+  geom_histogram(position="identity", size = 0.75)+
+  labs(x = "length", y = "#") +
+  ggdark::dark_theme_bw(base_size = 11)
+```
+
+```{r}
+##segments less than 250m long
+ggplot(select(streams, len) %>% filter(len < 250), aes(x=len)) +
+  geom_histogram(position="identity", size = 0.75)+
+  labs(x = "length", y = "#") +
+  ggdark::dark_theme_bw(base_size = 11)
+```
+
+```{r}
+##how many streams are segments are smaller than 50m
+streams %>% 
+  filter(len > 1000) %>% 
+  count()
+```
+
+```{r}
+streams_equal <- streams %>% 
+  mutate(cut = cut_number(len, n = 5)) %>% 
+  group_by(cut) %>% 
+  summarise(n = n())
+
+streams_equal
+
+
+
+
+```
+
+```{r}
+streams_interval <- streams %>% 
+  mutate(cut = cut_interval(len, n = 10)) %>% 
+  group_by(cut) %>% 
+  summarise(n = n())
+
+streams_interval
+```
+
+```{r}
+streams_length <- streams %>%
+  mutate(cut =
+           case_when(
+             len < 100 ~ '0_100',
+             len >= 100 & len < 500 ~ '0100_500',
+             len >= 500 & len < 999 ~ '0500_1000',
+             len >=999  ~ '1000+')) 
+
+streams_length_sum <- streams_length %>% 
+  group_by(cut) %>% 
+  summarise(n = n())
+
+streams_length_sum
+```
+
+
+```{r}
+ggplot(data = streams_length_sum, mapping = aes(x=cut, y = n)) + 
+  geom_bar(stat = "identity") + 
+  # ylim(1000, 20000)+
+  # labs(x='test') +
+  ggdark::dark_theme_bw(base_size = 11)
+```
+
+
+```{r}
+ggplot(streams_length, aes(x=len)) +
+  geom_histogram(position="identity", size = 0.75)+
+  labs(x = "length", y = "#") +
+  facet_wrap(~cut, ncol = 2, scales = "free")+
+  ggdark::dark_theme_bw(base_size = 11)
+```
 
 
 <!--chapter:end:0110-fwa.Rmd-->
+
+
+
+# Explore Data Exported from FISS
+Purpose of this section is to explore the species density data provided in csv format from the province.  We would like to be able to tie density of fish species to habitat characteristics including gradient, channel size, discharge, elevation, forest cover, etc.
+
+
+Load the data from the dropbox
+
+
+```{r}
+
+
+shared_dropbox_dir <- "C:/Users/al/Dropbox/New Graph/"
+
+
+files_to_read <- list.files(paste0(shared_dropbox_dir,"fiss/2020-11-16/"), full.names = T)
+files_names <- list.files(paste0(shared_dropbox_dir,"fiss/2020-11-16/"), full.names = F) %>% tools::file_path_sans_ext()
+
+
+##mini function to change column names to lower case
+names_to_lower <- function(dat){
+  dat %>% 
+  purrr::set_names(nm = stringr::str_to_lower(names(dat)))
+}
+
+
+d <- files_to_read %>% 
+  map(readr::read_csv) %>% 
+  map(names_to_lower) %>% 
+  purrr::set_names(nm = files_names)
+
+```
+
+
+```{r eval = F}
+##pull out the tibbles
+details <- d %>% pluck('details')
+visits <- d %>% pluck('visits')
+habitat <- d %>% pluck('habitat')
+counts <- d %>% pluck('counts')
+```
+
+Make a table that has all the info we want in one place for the summarized fish
+
+```{r}
+d_sum_raw <- left_join(
+  d %>% pluck('counts'),
+  d %>% pluck('visits'),
+  by = 'key'
+  ) %>% 
+  left_join(
+    .,
+    d %>% pluck('habitat'),
+    by = 'key'
+  ) %>% 
+##clean it up and grab a density
+  filter(!is.na(fishing_area_length) & 
+           fishing_area_length > 0 &
+           !is.na(fishing_area_width) &
+           fishing_area_width > 0 &
+           !is.na(utm_easting) &
+           !is.na(utm_northing) &
+           utm_zone > 0 &
+           #For the sake of a first run lets keep only the first passes from sites that have multiple passes
+           haul_or_pass == 1 &
+           species_code %in% c('RB', 'BT', 'GR', 'CH', 'CO', 'SK', 'WCT', 'ST', 'NFC')) %>%
+  mutate(density_100m = number_caught/(fishing_area_length * fishing_area_width) * 100)
+  
+```
+
+
+
+
+Lets review how many occurrences are from the same site - not sure it matters though.
+```{r}
+d_same_site <- d_sum_raw %>% 
+  group_by(across(data_set:agncy_id)) %>% 
+  summarise(n = n()) %>% 
+  filter(n > 1)
+  
+```
+
+<br>
+
+Lets have a look at what we have by species.
+```{r}
+d_raw_by_sp <- d_sum_raw %>% 
+  group_by(species_code) %>% 
+  mutate(area = fishing_area_length * fishing_area_width) %>% 
+  summarise(n = n(), 
+            dens_min = min(density_100m, na.rm = T),
+            dens_max = max(density_100m, na.rm = T),
+            dens_med = median(density_100m, na.rm = T),
+            area_min = min(area, na.rm = T),
+            area_max = max(area, na.rm = T),
+            area_med = median(area, na.rm = T),
+            len_min = min(fishing_area_length, na.rm = T),
+            len_max = max(fishing_area_length, na.rm = T),
+            len_med = median(fishing_area_length, na.rm = T),
+            wid_min = min(fishing_area_width, na.rm = T),
+            wid_max = max(fishing_area_width, na.rm = T),
+            wid_med = median(fishing_area_width, na.rm = T))
+
+d_raw_by_sp
+```
+
+
+```{r}
+ggplot(select(d_sum_raw, fishing_area_length), aes(x=fishing_area_length)) +
+  geom_histogram(position="identity", size = 0.75)+
+  labs(x = "fishing_area_length", y = "#") +
+  ggdark::dark_theme_bw(base_size = 11)
+
+```
+
+```{r}
+ggplot(select(d_sum_raw, fishing_area_width), aes(x=fishing_area_width)) +
+  geom_histogram(position="identity", size = 0.75)+
+  labs(x = "fishing_area_width", y = "#") +
+  ggdark::dark_theme_bw(base_size = 11)
+
+```
+
+
+Lets trim out our strange numbers for the site sizes
+
+
+```{r}
+d_sum <- left_join(
+  d %>% pluck('counts'),
+  d %>% pluck('visits'),
+  by = 'key'
+  ) %>% 
+  left_join(
+    .,
+    d %>% pluck('habitat'),
+    by = 'key'
+  ) %>% 
+##clean it up and grab a density
+  filter(!is.na(fishing_area_length) & 
+           fishing_area_length > 0.9 &
+           fishing_area_length < 500.1 &
+           !is.na(fishing_area_width) &
+           fishing_area_width > 0.5 &
+           fishing_area_width < 25.1 &
+           !is.na(utm_easting) &
+           !is.na(utm_northing) &
+           utm_zone > 0 &
+           #For the sake of a first run lets keep only the first passes from sites that have multiple passes
+           haul_or_pass == 1 &
+           species_code %in% c('RB', 'BT', 'GR', 'CH', 'CO', 'SK', 'WCT', 'ST', 'NFC')) %>%
+  mutate(density_100m = number_caught/(fishing_area_length * fishing_area_width) * 100)
+
+
+##have another look at it
+d_by_sp <- d_sum %>% 
+  group_by(species_code) %>% 
+  mutate(area = fishing_area_length * fishing_area_width) %>% 
+  summarise(n = n(), 
+            dens_min = min(density_100m, na.rm = T),
+            dens_max = max(density_100m, na.rm = T),
+            dens_med = median(density_100m, na.rm = T),
+            area_min = min(area, na.rm = T),
+            area_max = max(area, na.rm = T),
+            area_med = median(area, na.rm = T),
+            len_min = min(fishing_area_length, na.rm = T),
+            len_max = max(fishing_area_length, na.rm = T),
+            len_med = median(fishing_area_length, na.rm = T),
+            wid_min = min(fishing_area_width, na.rm = T),
+            wid_max = max(fishing_area_width, na.rm = T),
+            wid_med = median(fishing_area_width, na.rm = T))
+
+d_by_sp  
+```
+
+
+
+```{r}
+ggplot(select(d_sum, fishing_area_length), aes(x=fishing_area_length)) +
+  geom_histogram(position="identity", size = 0.75)+
+  labs(x = "fishing_area_length", y = "#") +
+  ggdark::dark_theme_bw(base_size = 11)
+
+```
+
+```{r}
+ggplot(select(d_sum, fishing_area_width), aes(x=fishing_area_width)) +
+  geom_histogram(position="identity", size = 0.75)+
+  labs(x = "fishing_area_width", y = "#") +
+  ggdark::dark_theme_bw(base_size = 11)
+
+```
+
+<br>
+
+What do the small sites look like?  Should we keep them?
+
+```{r}
+
+length_cut <- 10
+width_cut <- 1
+
+sites_small <- d_sum %>%
+  filter(fishing_area_length < length_cut |
+           fishing_area_width < width_cut) %>% 
+  mutate(wettedwidth_ave = rowMeans(select(., starts_with("wetted")), na.rm = TRUE)) %>% 
+  select(fishing_area_length, fishing_area_width, wettedwidth_ave)
+
+sites_small
+```
+
+<br>
+
+These are small sites that have associated wetted widths
+
+```{r}
+sites_small %>% 
+  filter(!is.na(wettedwidth_ave))
+```
+
+```{r}
+sites_small_len <- sites_small %>% 
+  filter(fishing_area_length < length_cut)
+
+sites_small_len
+```
+<br>
+
+Distribution of sites with small lengths 
+```{r}
+ggplot(select(sites_small_len, fishing_area_length), aes(x=fishing_area_length)) +
+  geom_histogram(position="identity", size = 0.75)+
+  labs(x = "fishing_area_length", y = "#") +
+  ggdark::dark_theme_bw(base_size = 11)
+
+```
+
+
+<br>
+
+Sites with small widths
+
+```{r}
+sites_small_wid <- sites_small %>% 
+  filter(fishing_area_width < width_cut)
+
+sites_small_wid
+```
+
+<br>
+
+Distribution of sites with small widths.  Are these sites where it was a presence/absence test so maybe not suitable for density modelling? Don't know...
+```{r}
+ggplot(select(sites_small_wid, fishing_area_width), aes(x=fishing_area_width)) +
+  geom_histogram(position="identity", size = 0.75)+
+  labs(x = "fishing_area_width", y = "#") +
+  ggdark::dark_theme_bw(base_size = 11)
+
+```
+
+
+
+
+
+<!--chapter:end:0120-fiss.Rmd-->
+
+
+
+# Make FISS data spatial
+We need in spatial format to tie to the FWA so lets put everything in albers and add the X and Y to the dataframe
+
+```{r}
+d_sum_albers <- d_sum %>% 
+  dplyr::group_split(utm_zone) %>% 
+  map(utm_to_coord) %>% 
+  bind_rows()
+```
+
+Next steps?:
+
+ * burn dataframe into postgres that represents the X and Y locations of these sites
+ * tie the locations of the sites to stream segments
+ * QA how well the sites tie to streams and find a way to filter out (or correct) bad matches. I wonder about having a little script that will biuld a quick R map of the watershed showing the site, watershed, stream, elevation contours, etc - just an idea).  Might be quick and easy once set up but could be easier to just use Q...
+ * extract habitat characteristics associated with the points (elevation, watershed size, channel width, discharge, BEC zone?, forest cover?, geology, channel confinement?)
+
+<!--chapter:end:0130-fiss_spatial.Rmd-->
 

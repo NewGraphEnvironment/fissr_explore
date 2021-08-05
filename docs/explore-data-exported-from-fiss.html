@@ -275,12 +275,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb27-2"><a href="explore-data-exported-from-fiss.html#cb27-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="at">position=</span><span class="st">&quot;identity&quot;</span>, <span class="at">size =</span> <span class="fl">0.75</span>)<span class="sc">+</span></span>
 <span id="cb27-3"><a href="explore-data-exported-from-fiss.html#cb27-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;fishing_area_length&quot;</span>, <span class="at">y =</span> <span class="st">&quot;#&quot;</span>) <span class="sc">+</span></span>
 <span id="cb27-4"><a href="explore-data-exported-from-fiss.html#cb27-4" aria-hidden="true" tabindex="-1"></a>  ggdark<span class="sc">::</span><span class="fu">dark_theme_bw</span>(<span class="at">base_size =</span> <span class="dv">11</span>)</span></code></pre></div>
-<p><img src="Template_files/figure-html/unnamed-chunk-34-1.png" width="100%" /></p>
+<p><img src="Template_files/figure-html/unnamed-chunk-20-1.png" width="100%" /></p>
 <div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb28-1"><a href="explore-data-exported-from-fiss.html#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="fu">select</span>(d_sum_raw, fishing_area_width), <span class="fu">aes</span>(<span class="at">x=</span>fishing_area_width)) <span class="sc">+</span></span>
 <span id="cb28-2"><a href="explore-data-exported-from-fiss.html#cb28-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="at">position=</span><span class="st">&quot;identity&quot;</span>, <span class="at">size =</span> <span class="fl">0.75</span>)<span class="sc">+</span></span>
 <span id="cb28-3"><a href="explore-data-exported-from-fiss.html#cb28-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;fishing_area_width&quot;</span>, <span class="at">y =</span> <span class="st">&quot;#&quot;</span>) <span class="sc">+</span></span>
 <span id="cb28-4"><a href="explore-data-exported-from-fiss.html#cb28-4" aria-hidden="true" tabindex="-1"></a>  ggdark<span class="sc">::</span><span class="fu">dark_theme_bw</span>(<span class="at">base_size =</span> <span class="dv">11</span>)</span></code></pre></div>
-<p><img src="Template_files/figure-html/unnamed-chunk-35-1.png" width="100%" /></p>
+<p><img src="Template_files/figure-html/unnamed-chunk-21-1.png" width="100%" /></p>
 <p>Lets trim out our strange numbers for the site sizes</p>
 <div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb29-1"><a href="explore-data-exported-from-fiss.html#cb29-1" aria-hidden="true" tabindex="-1"></a>d_sum <span class="ot">&lt;-</span> <span class="fu">left_join</span>(</span>
 <span id="cb29-2"><a href="explore-data-exported-from-fiss.html#cb29-2" aria-hidden="true" tabindex="-1"></a>  d <span class="sc">%&gt;%</span> <span class="fu">pluck</span>(<span class="st">&#39;counts&#39;</span>),</span>
@@ -343,12 +343,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb31-2"><a href="explore-data-exported-from-fiss.html#cb31-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="at">position=</span><span class="st">&quot;identity&quot;</span>, <span class="at">size =</span> <span class="fl">0.75</span>)<span class="sc">+</span></span>
 <span id="cb31-3"><a href="explore-data-exported-from-fiss.html#cb31-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;fishing_area_length&quot;</span>, <span class="at">y =</span> <span class="st">&quot;#&quot;</span>) <span class="sc">+</span></span>
 <span id="cb31-4"><a href="explore-data-exported-from-fiss.html#cb31-4" aria-hidden="true" tabindex="-1"></a>  ggdark<span class="sc">::</span><span class="fu">dark_theme_bw</span>(<span class="at">base_size =</span> <span class="dv">11</span>)</span></code></pre></div>
-<p><img src="Template_files/figure-html/unnamed-chunk-37-1.png" width="100%" /></p>
+<p><img src="Template_files/figure-html/unnamed-chunk-23-1.png" width="100%" /></p>
 <div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb32-1"><a href="explore-data-exported-from-fiss.html#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="fu">select</span>(d_sum, fishing_area_width), <span class="fu">aes</span>(<span class="at">x=</span>fishing_area_width)) <span class="sc">+</span></span>
 <span id="cb32-2"><a href="explore-data-exported-from-fiss.html#cb32-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="at">position=</span><span class="st">&quot;identity&quot;</span>, <span class="at">size =</span> <span class="fl">0.75</span>)<span class="sc">+</span></span>
 <span id="cb32-3"><a href="explore-data-exported-from-fiss.html#cb32-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;fishing_area_width&quot;</span>, <span class="at">y =</span> <span class="st">&quot;#&quot;</span>) <span class="sc">+</span></span>
 <span id="cb32-4"><a href="explore-data-exported-from-fiss.html#cb32-4" aria-hidden="true" tabindex="-1"></a>  ggdark<span class="sc">::</span><span class="fu">dark_theme_bw</span>(<span class="at">base_size =</span> <span class="dv">11</span>)</span></code></pre></div>
-<p><img src="Template_files/figure-html/unnamed-chunk-38-1.png" width="100%" /></p>
+<p><img src="Template_files/figure-html/unnamed-chunk-24-1.png" width="100%" /></p>
 <p><br></p>
 <p>What do the small sites look like? Should we keep them?</p>
 <div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb33-1"><a href="explore-data-exported-from-fiss.html#cb33-1" aria-hidden="true" tabindex="-1"></a>length_cut <span class="ot">&lt;-</span> <span class="dv">10</span></span>
@@ -417,7 +417,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb39-2"><a href="explore-data-exported-from-fiss.html#cb39-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="at">position=</span><span class="st">&quot;identity&quot;</span>, <span class="at">size =</span> <span class="fl">0.75</span>)<span class="sc">+</span></span>
 <span id="cb39-3"><a href="explore-data-exported-from-fiss.html#cb39-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;fishing_area_length&quot;</span>, <span class="at">y =</span> <span class="st">&quot;#&quot;</span>) <span class="sc">+</span></span>
 <span id="cb39-4"><a href="explore-data-exported-from-fiss.html#cb39-4" aria-hidden="true" tabindex="-1"></a>  ggdark<span class="sc">::</span><span class="fu">dark_theme_bw</span>(<span class="at">base_size =</span> <span class="dv">11</span>)</span></code></pre></div>
-<p><img src="Template_files/figure-html/unnamed-chunk-42-1.png" width="100%" /></p>
+<p><img src="Template_files/figure-html/unnamed-chunk-28-1.png" width="100%" /></p>
 <p><br></p>
 <p>Sites with small widths</p>
 <div class="sourceCode" id="cb40"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb40-1"><a href="explore-data-exported-from-fiss.html#cb40-1" aria-hidden="true" tabindex="-1"></a>sites_small_wid <span class="ot">&lt;-</span> sites_small <span class="sc">%&gt;%</span> </span>
@@ -444,7 +444,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb42-2"><a href="explore-data-exported-from-fiss.html#cb42-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="at">position=</span><span class="st">&quot;identity&quot;</span>, <span class="at">size =</span> <span class="fl">0.75</span>)<span class="sc">+</span></span>
 <span id="cb42-3"><a href="explore-data-exported-from-fiss.html#cb42-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;fishing_area_width&quot;</span>, <span class="at">y =</span> <span class="st">&quot;#&quot;</span>) <span class="sc">+</span></span>
 <span id="cb42-4"><a href="explore-data-exported-from-fiss.html#cb42-4" aria-hidden="true" tabindex="-1"></a>  ggdark<span class="sc">::</span><span class="fu">dark_theme_bw</span>(<span class="at">base_size =</span> <span class="dv">11</span>)</span></code></pre></div>
-<p><img src="Template_files/figure-html/unnamed-chunk-44-1.png" width="100%" /></p>
+<p><img src="Template_files/figure-html/unnamed-chunk-30-1.png" width="100%" /></p>
 
 </div>
             </section>
