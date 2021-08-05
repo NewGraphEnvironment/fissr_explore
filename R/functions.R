@@ -1,7 +1,7 @@
 
 
 
-##funciton ot find a string in your directory from https://stackoverflow.com/questions/45502010/is-there-an-r-version-of-rstudios-find-in-files
+##funciton to find a string in your directory from https://stackoverflow.com/questions/45502010/is-there-an-r-version-of-rstudios-find-in-files
 
 fif <- function(what, where=".", in_files="\\.[Rr]$", recursive = TRUE,
                 ignore.case = TRUE) {
