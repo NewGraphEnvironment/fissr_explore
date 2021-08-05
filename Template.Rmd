@@ -523,6 +523,14 @@ d_sum_albers <- d_sum %>%
   bind_rows()
 ```
 
+<br>
+
+Burn to a csv so that Simon can access and join to habitat characteristics
+
+```{r}
+d_sum_albers %>% readr::write_csv(file = paste0(getwd(), '/data/fiss_density.csv'))
+```
+
 Next steps?:
 
  * burn dataframe into postgres that represents the X and Y locations of these sites

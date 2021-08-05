@@ -191,6 +191,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb43-2"><a href="make-fiss-data-spatial.html#cb43-2" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">group_split</span>(utm_zone) <span class="sc">%&gt;%</span> </span>
 <span id="cb43-3"><a href="make-fiss-data-spatial.html#cb43-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">map</span>(utm_to_coord) <span class="sc">%&gt;%</span> </span>
 <span id="cb43-4"><a href="make-fiss-data-spatial.html#cb43-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">bind_rows</span>()</span></code></pre></div>
+<p><br></p>
+<p>Burn to a csv so that Simon can access and join to habitat characteristics</p>
+<div class="sourceCode" id="cb44"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb44-1"><a href="make-fiss-data-spatial.html#cb44-1" aria-hidden="true" tabindex="-1"></a>d_sum_albers <span class="sc">%&gt;%</span> readr<span class="sc">::</span><span class="fu">write_csv</span>(<span class="at">file =</span> <span class="fu">paste0</span>(<span class="fu">getwd</span>(), <span class="st">&#39;/data/fiss_density.csv&#39;</span>))</span></code></pre></div>
 <p>Next steps?:</p>
 <ul>
 <li>burn dataframe into postgres that represents the X and Y locations of these sites</li>
