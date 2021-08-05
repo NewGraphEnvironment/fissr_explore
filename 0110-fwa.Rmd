@@ -1,11 +1,13 @@
 
 
-# FWA Streams
+# Explore FWA Streams
+Purpose of this section was to explore the lengths and frequencies of double lined streams as there is a channel width predictor model `channel-width-21`.  Result of this work was that Simon has sampled each double line stream 30 times and kept the average and standard deviation - regarless of segment length [`bcfishpass`](https://github.com/smnorris/bcfishpass/tree/main/01_prep/habitat/02_channel_width).
 
-Load the double line streams used in channel_width_mapped
+
+Load the double line streams used in channel_width_mapped.  In order to facilitate reproducability lets save the streams in a sqlite and pull them back in.
 
 
-```{r}
+```{r eval=FALSE}
 
 
 ##gconnect to database
@@ -28,7 +30,35 @@ q <- ("SELECT linear_feature_id, ceil(upstream_route_measure)::integer - floor(d
 
 streams <- sf::st_read(conn, query = q) 
 
+
+
+## In order to facilitate reproducability lets save the streams in a sqlite and pull them back in.
+
+##########################!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!#########################
+###change this up so that it matches your version of the dropbox!
+shared_dropbox_dir <- "C:/Users/al/Dropbox/New Graph/"
+
+
+
+mydb <- DBI::dbConnect(RSQLite::SQLite(), paste0(shared_dropbox_dir, "fiss/fissr_explore.sqlite"))
+
+
+conn <- readwritesqlite::rws_connect(paste0(shared_dropbox_dir, "fiss/fissr_explore.sqlite"))
+readwritesqlite::rws_write(streams, exists = F, delete = TRUE,
+          conn = conn, x_name = "whse_basemapping.fwa_stream_networks_sp")
+readwritesqlite::rws_list_tables(conn)
+readwritesqlite::rws_disconnect(conn)
 ```
+
+
+Load the streams from sqlite.  The table I pull back in after saving as `sqlite` has `linear_feature_id` as integer vs int64 as it was pulled from `postgres`. No issues for this exercise though...
+
+```{r}
+conn <- readwritesqlite::rws_connect(paste0(shared_dropbox_dir, "fiss/fissr_explore.sqlite"))
+streams2 <- readwritesqlite::rws_read_table("whse_basemapping.fwa_stream_networks_sp", conn = conn)
+readwritesqlite::rws_disconnect(conn)
+```
+
 ```{r}
 summary(streams$len)
 
