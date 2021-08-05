@@ -27,7 +27,7 @@ pacman::p_load(
   # flextable,
   # english,
   # leaflet.extras,
-  ggdark,
+  ggdark
   # pdftools,
   # geojsonsf,
   # bit64 ##to make integer column type for pg
