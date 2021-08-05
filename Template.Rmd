@@ -272,11 +272,6 @@ Load the data from the dropbox
 
 
 ```{r}
-
-
-shared_dropbox_dir <- "C:/Users/al/Dropbox/New Graph/"
-
-
 files_to_read <- list.files(paste0(shared_dropbox_dir,"fiss/2020-11-16/"), full.names = T)
 files_names <- list.files(paste0(shared_dropbox_dir,"fiss/2020-11-16/"), full.names = F) %>% tools::file_path_sans_ext()
 
@@ -295,14 +290,6 @@ d <- files_to_read %>%
 
 ```
 
-
-```{r eval = F}
-##pull out the tibbles
-details <- d %>% pluck('details')
-visits <- d %>% pluck('visits')
-habitat <- d %>% pluck('habitat')
-counts <- d %>% pluck('counts')
-```
 
 Make a table that has all the info we want in one place for the summarized fish
 
