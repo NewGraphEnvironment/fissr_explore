@@ -4,11 +4,11 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>3 Make FISS data spatial | Linking Fish Density to Habitat Characteristics</title>
+  <title>4 Make FISS data spatial | Linking Fish Density to Habitat Characteristics</title>
   <meta name="description" content="My Description." />
   <meta name="generator" content="bookdown 0.22 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="3 Make FISS data spatial | Linking Fish Density to Habitat Characteristics" />
+  <meta property="og:title" content="4 Make FISS data spatial | Linking Fish Density to Habitat Characteristics" />
   <meta property="og:type" content="book" />
   
   
@@ -16,7 +16,7 @@
   <meta name="github-repo" content="rstudio/bookdown-demo" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="3 Make FISS data spatial | Linking Fish Density to Habitat Characteristics" />
+  <meta name="twitter:title" content="4 Make FISS data spatial | Linking Fish Density to Habitat Characteristics" />
   
   <meta name="twitter:description" content="My Description." />
   
@@ -161,9 +161,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 <li class="divider"></li>
 <li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Acknowledgement</a></li>
-<li class="chapter" data-level="1" data-path="explore-fwa-streams.html"><a href="explore-fwa-streams.html"><i class="fa fa-check"></i><b>1</b> Explore FWA Streams</a></li>
-<li class="chapter" data-level="2" data-path="explore-data-exported-from-fiss.html"><a href="explore-data-exported-from-fiss.html"><i class="fa fa-check"></i><b>2</b> Explore Data Exported from FISS</a></li>
-<li class="chapter" data-level="3" data-path="make-fiss-data-spatial.html"><a href="make-fiss-data-spatial.html"><i class="fa fa-check"></i><b>3</b> Make FISS data spatial</a></li>
+<li class="chapter" data-level="1" data-path="big-picture.html"><a href="big-picture.html"><i class="fa fa-check"></i><b>1</b> Big Picture</a></li>
+<li class="chapter" data-level="2" data-path="explore-fwa-streams.html"><a href="explore-fwa-streams.html"><i class="fa fa-check"></i><b>2</b> Explore FWA Streams</a></li>
+<li class="chapter" data-level="3" data-path="explore-data-exported-from-fiss.html"><a href="explore-data-exported-from-fiss.html"><i class="fa fa-check"></i><b>3</b> Explore Data Exported from FISS</a></li>
+<li class="chapter" data-level="4" data-path="make-fiss-data-spatial.html"><a href="make-fiss-data-spatial.html"><i class="fa fa-check"></i><b>4</b> Make FISS data spatial</a></li>
 <li class="divider"></li>
 <li><a href="https://github.com/NewGraphEnvironment/mybookdown-template" target="blank">Scripts and Data</a></li>
 
@@ -184,8 +185,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="make-fiss-data-spatial" class="section level1" number="3">
-<h1><span class="header-section-number">3</span> Make FISS data spatial</h1>
+<div id="make-fiss-data-spatial" class="section level1" number="4">
+<h1><span class="header-section-number">4</span> Make FISS data spatial</h1>
 <p>We need in spatial format to tie to the FWA so lets put everything in albers and add the X and Y to the dataframe</p>
 <div class="sourceCode" id="cb43"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb43-1"><a href="make-fiss-data-spatial.html#cb43-1" aria-hidden="true" tabindex="-1"></a>d_sum_albers <span class="ot">&lt;-</span> d_sum <span class="sc">%&gt;%</span> </span>
 <span id="cb43-2"><a href="make-fiss-data-spatial.html#cb43-2" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">group_split</span>(utm_zone) <span class="sc">%&gt;%</span> </span>
@@ -196,10 +197,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div class="sourceCode" id="cb44"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb44-1"><a href="make-fiss-data-spatial.html#cb44-1" aria-hidden="true" tabindex="-1"></a>d_sum_albers <span class="sc">%&gt;%</span> readr<span class="sc">::</span><span class="fu">write_csv</span>(<span class="at">file =</span> <span class="fu">paste0</span>(<span class="fu">getwd</span>(), <span class="st">&#39;/data/fiss_density.csv&#39;</span>))</span></code></pre></div>
 <p>Next steps?:</p>
 <ul>
-<li>burn dataframe into postgres that represents the X and Y locations of these sites</li>
-<li>tie the locations of the sites to stream segments</li>
-<li>QA how well the sites tie to streams and find a way to filter out (or correct) bad matches. I wonder about having a little script that will biuld a quick R map of the watershed showing the site, watershed, stream, elevation contours, etc - just an idea). Might be quick and easy once set up but could be easier to just use Q…</li>
-<li>extract habitat characteristics associated with the points (elevation, watershed size, channel width, discharge, BEC zone?, forest cover?, geology, channel confinement?)</li>
+<li>While Joe and Nadine tweak the channel-width-21 analysis and have a look at what data from here they think we should keep or throw away…</li>
+<li>Simon maybe burns dataframe into postgres that represents the X and Y locations of these sites and ties the locations of the sites to stream segments then pulls out everything he can about the watershed upstream (ex. elevation, watershed size, channel width, discharge, BEC zone, precip, etc ). Future considerations include perhaps forest cover, geology, channel confinement, <a href="https://www.pacificclimate.org/data/gridded-hydrologic-model-output">Variable Infiltration Capacity (VIC-GL) model stuff</a>)</li>
+<li>We should QA how well the sites tie to streams and find a way to filter out (or correct) bad matches if possible.</li>
+<li>Feed results back to Joe and Nadine to see what we can gleen from the data.</li>
 </ul>
 
 </div>

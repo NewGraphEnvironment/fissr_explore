@@ -88,6 +88,23 @@ title.innerHTML = '<img src="fig/logo.png" alt="NewGraph">' + title.innerHTML
 
 
 
+# Big Picture
+Big picture here is to try to build evidence based approach to the parameters used to model the best habitat for individual fish species to help make decisions around where to invest in aquatic restoration activities (along with lots of others factors of course).  [`bcfishpass`](https://github.com/smnorris/bcfishpass/tree/main/02_model/parameters_newgraph) will except habitat parameters that allow us to model the quantity of potential spawning and rearing habitat upstream of culvert locations. How do we come up with those parameters? 
+
+<br>
+
+Using the electrofishing data from British Columbia databases this is a start on an attempt to tie fish density to habitat characteristics. Gradient is easy in the freshwater atlas, and discharge data is available for some watersheds from [PCIC](https://www.pacificclimate.org/data/gridded-hydrologic-model-output).  We are developing methods to estimate [channel width](https://github.com/smnorris/bcfishpass/tree/main/01_prep/habitat/02_channel_width) using watershed size, precipitation and potentially other factors. Joe is a [monster](https://github.com/NewGraphEnvironment/fish_passage_bulkley_2020_reporting/blob/master/docs/channel-width-21.pdf). Other parameters that have fed the PCIC discharge data could be considered to build discharge estimates raw? 
+
+<br>
+
+Joe had a great point when he said that we might start with BC data but should keep our minds open to ways of bringing in datasets from elsewhere in the long term. 
+
+
+
+<!--chapter:end:0100-intro.Rmd-->
+
+
+
 # Explore FWA Streams
 Purpose of this section was to explore the lengths and frequencies of double lined streams as there is a channel width predictor model `channel-width-21`.  Result of this work was that Simon has sampled each double line stream 30 times and kept the average and standard deviation - regarless of segment length [`bcfishpass`](https://github.com/smnorris/bcfishpass/tree/main/01_prep/habitat/02_channel_width).
 
@@ -533,10 +550,10 @@ d_sum_albers %>% readr::write_csv(file = paste0(getwd(), '/data/fiss_density.csv
 
 Next steps?:
 
- * burn dataframe into postgres that represents the X and Y locations of these sites
- * tie the locations of the sites to stream segments
- * QA how well the sites tie to streams and find a way to filter out (or correct) bad matches. I wonder about having a little script that will biuld a quick R map of the watershed showing the site, watershed, stream, elevation contours, etc - just an idea).  Might be quick and easy once set up but could be easier to just use Q...
- * extract habitat characteristics associated with the points (elevation, watershed size, channel width, discharge, BEC zone?, forest cover?, geology, channel confinement?)
+ * While Joe and Nadine tweak the channel-width-21 analysis and have a look at what data from here they think we should keep or throw away...
+ * Simon maybe burns dataframe into postgres that represents the X and Y locations of these sites and ties the locations of the sites to stream segments then pulls out everything he can about the watershed upstream (ex. elevation, watershed size, channel width, discharge, BEC zone, precip, etc ).  Future considerations include perhaps forest cover, geology, channel confinement, [Variable Infiltration Capacity (VIC-GL) model stuff](https://www.pacificclimate.org/data/gridded-hydrologic-model-output))
+ * We should QA how well the sites tie to streams and find a way to filter out (or correct) bad matches if possible.
+ * Feed results back to Joe and Nadine to see what we can gleen from the data.
 
 <!--chapter:end:0130-fiss_spatial.Rmd-->
 

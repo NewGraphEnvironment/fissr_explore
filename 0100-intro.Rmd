@@ -1,0 +1,14 @@
+
+
+# Big Picture
+Big picture here is to try to build evidence based approach to the parameters used to model the best habitat for individual fish species to help make decisions around where to invest in aquatic restoration activities (along with lots of others factors of course).  [`bcfishpass`](https://github.com/smnorris/bcfishpass/tree/main/02_model/parameters_newgraph) will except habitat parameters that allow us to model the quantity of potential spawning and rearing habitat upstream of culvert locations. How do we come up with those parameters? 
+
+<br>
+
+Using the electrofishing data from British Columbia databases this is a start on an attempt to tie fish density to habitat characteristics. Gradient is easy in the freshwater atlas, and discharge data is available for some watersheds from [PCIC](https://www.pacificclimate.org/data/gridded-hydrologic-model-output).  We are developing methods to estimate [channel width](https://github.com/smnorris/bcfishpass/tree/main/01_prep/habitat/02_channel_width) using watershed size, precipitation and potentially other factors. Joe is a [monster](https://github.com/NewGraphEnvironment/fish_passage_bulkley_2020_reporting/blob/master/docs/channel-width-21.pdf). Other parameters that have fed the PCIC discharge data could be considered to build discharge estimates raw? 
+
+<br>
+
+Joe had a great point when he said that we might start with BC data but should keep our minds open to ways of bringing in datasets from elsewhere in the long term. 
+
+
