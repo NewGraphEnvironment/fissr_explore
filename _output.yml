@@ -4,7 +4,7 @@ bookdown::gitbook:
   config:
     toc:
       before: |
-        <li><a href="./">Template</a></li>
+        <li><a href="./">Linking Fish Density to Habitat Characteristics</a></li>
       after: |
         <li><a href="https://github.com/NewGraphEnvironment/mybookdown-template" target="blank">Scripts and Data</a></li>
     download: ["Template.pdf", "Template.html"]
