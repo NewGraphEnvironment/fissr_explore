@@ -1,0 +1,18 @@
+
+
+# Make FISS data spatial
+We need in spatial format to tie to the FWA so lets put everything in albers and add the X and Y to the dataframe
+
+```{r}
+d_sum_albers <- d_sum %>% 
+  dplyr::group_split(utm_zone) %>% 
+  map(utm_to_coord) %>% 
+  bind_rows()
+```
+
+Next steps?:
+
+ * burn dataframe into postgres that represents the X and Y locations of these sites
+ * tie the locations of the sites to stream segments
+ * QA how well the sites tie to streams and find a way to filter out (or correct) bad matches. I wonder about having a little script that will biuld a quick R map of the watershed showing the site, watershed, stream, elevation contours, etc - just an idea).  Might be quick and easy once set up but could be easier to just use Q...
+ * extract habitat characteristics associated with the points (elevation, watershed size, channel width, discharge, BEC zone?, forest cover?, geology, channel confinement?)

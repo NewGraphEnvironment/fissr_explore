@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>2 Explore Data Exported from FISS | Linking Fish Density to Habitat Characteristics</title>
+  <meta name="description" content="My Description." />
+  <meta name="generator" content="bookdown 0.22 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="2 Explore Data Exported from FISS | Linking Fish Density to Habitat Characteristics" />
+  <meta property="og:type" content="book" />
+  
+  
+  <meta property="og:description" content="My Description." />
+  <meta name="github-repo" content="rstudio/bookdown-demo" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="2 Explore Data Exported from FISS | Linking Fish Density to Habitat Characteristics" />
+  
+  <meta name="twitter:description" content="My Description." />
+  
+
+
+
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="explore-fwa-streams.html"/>
+<link rel="next" href="make-fiss-data-spatial.html"/>
+<script src="libs/header-attrs-2.9/header-attrs.js"></script>
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.0.1/anchor-sections.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.0.1/anchor-sections.js"></script>
+
+<script type="text/javascript">
+
+// toggle visibility of R source blocks in R Markdown output
+function toggle_R() {
+  var x = document.getElementsByClassName('r');
+  if (x.length == 0) return;
+  function toggle_vis(o) {
+    var d = o.style.display;
+    o.style.display = (d == 'block' || d == '') ? 'none':'block';
+  }
+
+  for (i = 0; i < x.length; i++) {
+    var y = x[i];
+    if (y.tagName.toLowerCase() === 'pre') toggle_vis(y);
+  }
+
+    var elem = document.getElementById("myButton1");
+    if (elem.value === "Hide Scripts") elem.value = "Show Scripts";
+    else elem.value = "Hide Scripts";
+}
+
+document.write('<input onclick="toggle_R();" type="button" value="Hide Scripts" id="myButton1" style="position: absolute; top: 10%; right: 2%; z-index: 200"></input>')
+
+</script>
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">Template</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Acknowledgement</a></li>
+<li class="chapter" data-level="1" data-path="explore-fwa-streams.html"><a href="explore-fwa-streams.html"><i class="fa fa-check"></i><b>1</b> Explore FWA Streams</a></li>
+<li class="chapter" data-level="2" data-path="explore-data-exported-from-fiss.html"><a href="explore-data-exported-from-fiss.html"><i class="fa fa-check"></i><b>2</b> Explore Data Exported from FISS</a></li>
+<li class="chapter" data-level="3" data-path="make-fiss-data-spatial.html"><a href="make-fiss-data-spatial.html"><i class="fa fa-check"></i><b>3</b> Make FISS data spatial</a></li>
+<li class="divider"></li>
+<li><a href="https://github.com/NewGraphEnvironment/mybookdown-template" target="blank">Scripts and Data</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Linking Fish Density to Habitat Characteristics</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="explore-data-exported-from-fiss" class="section level1" number="2">
+<h1><span class="header-section-number">2</span> Explore Data Exported from FISS</h1>
+<p>Purpose of this section is to explore the species density data provided in csv format from the province. We would like to be able to tie density of fish species to habitat characteristics including gradient, channel size, discharge, elevation, forest cover, etc.</p>
+<p>Load the data from the dropbox</p>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="explore-data-exported-from-fiss.html#cb21-1" aria-hidden="true" tabindex="-1"></a>shared_dropbox_dir <span class="ot">&lt;-</span> <span class="st">&quot;C:/Users/al/Dropbox/New Graph/&quot;</span></span>
+<span id="cb21-2"><a href="explore-data-exported-from-fiss.html#cb21-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-3"><a href="explore-data-exported-from-fiss.html#cb21-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-4"><a href="explore-data-exported-from-fiss.html#cb21-4" aria-hidden="true" tabindex="-1"></a>files_to_read <span class="ot">&lt;-</span> <span class="fu">list.files</span>(<span class="fu">paste0</span>(shared_dropbox_dir,<span class="st">&quot;fiss/2020-11-16/&quot;</span>), <span class="at">full.names =</span> T)</span>
+<span id="cb21-5"><a href="explore-data-exported-from-fiss.html#cb21-5" aria-hidden="true" tabindex="-1"></a>files_names <span class="ot">&lt;-</span> <span class="fu">list.files</span>(<span class="fu">paste0</span>(shared_dropbox_dir,<span class="st">&quot;fiss/2020-11-16/&quot;</span>), <span class="at">full.names =</span> F) <span class="sc">%&gt;%</span> tools<span class="sc">::</span><span class="fu">file_path_sans_ext</span>()</span>
+<span id="cb21-6"><a href="explore-data-exported-from-fiss.html#cb21-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-7"><a href="explore-data-exported-from-fiss.html#cb21-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-8"><a href="explore-data-exported-from-fiss.html#cb21-8" aria-hidden="true" tabindex="-1"></a><span class="do">##mini function to change column names to lower case</span></span>
+<span id="cb21-9"><a href="explore-data-exported-from-fiss.html#cb21-9" aria-hidden="true" tabindex="-1"></a>names_to_lower <span class="ot">&lt;-</span> <span class="cf">function</span>(dat){</span>
+<span id="cb21-10"><a href="explore-data-exported-from-fiss.html#cb21-10" aria-hidden="true" tabindex="-1"></a>  dat <span class="sc">%&gt;%</span> </span>
+<span id="cb21-11"><a href="explore-data-exported-from-fiss.html#cb21-11" aria-hidden="true" tabindex="-1"></a>  purrr<span class="sc">::</span><span class="fu">set_names</span>(<span class="at">nm =</span> stringr<span class="sc">::</span><span class="fu">str_to_lower</span>(<span class="fu">names</span>(dat)))</span>
+<span id="cb21-12"><a href="explore-data-exported-from-fiss.html#cb21-12" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb21-13"><a href="explore-data-exported-from-fiss.html#cb21-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-14"><a href="explore-data-exported-from-fiss.html#cb21-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-15"><a href="explore-data-exported-from-fiss.html#cb21-15" aria-hidden="true" tabindex="-1"></a>d <span class="ot">&lt;-</span> files_to_read <span class="sc">%&gt;%</span> </span>
+<span id="cb21-16"><a href="explore-data-exported-from-fiss.html#cb21-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">map</span>(readr<span class="sc">::</span>read_csv) <span class="sc">%&gt;%</span> </span>
+<span id="cb21-17"><a href="explore-data-exported-from-fiss.html#cb21-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">map</span>(names_to_lower) <span class="sc">%&gt;%</span> </span>
+<span id="cb21-18"><a href="explore-data-exported-from-fiss.html#cb21-18" aria-hidden="true" tabindex="-1"></a>  purrr<span class="sc">::</span><span class="fu">set_names</span>(<span class="at">nm =</span> files_names)</span></code></pre></div>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="explore-data-exported-from-fiss.html#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="do">##pull out the tibbles</span></span>
+<span id="cb22-2"><a href="explore-data-exported-from-fiss.html#cb22-2" aria-hidden="true" tabindex="-1"></a>details <span class="ot">&lt;-</span> d <span class="sc">%&gt;%</span> <span class="fu">pluck</span>(<span class="st">&#39;details&#39;</span>)</span>
+<span id="cb22-3"><a href="explore-data-exported-from-fiss.html#cb22-3" aria-hidden="true" tabindex="-1"></a>visits <span class="ot">&lt;-</span> d <span class="sc">%&gt;%</span> <span class="fu">pluck</span>(<span class="st">&#39;visits&#39;</span>)</span>
+<span id="cb22-4"><a href="explore-data-exported-from-fiss.html#cb22-4" aria-hidden="true" tabindex="-1"></a>habitat <span class="ot">&lt;-</span> d <span class="sc">%&gt;%</span> <span class="fu">pluck</span>(<span class="st">&#39;habitat&#39;</span>)</span>
+<span id="cb22-5"><a href="explore-data-exported-from-fiss.html#cb22-5" aria-hidden="true" tabindex="-1"></a>counts <span class="ot">&lt;-</span> d <span class="sc">%&gt;%</span> <span class="fu">pluck</span>(<span class="st">&#39;counts&#39;</span>)</span></code></pre></div>
+<p>Make a table that has all the info we want in one place for the summarized fish</p>
+<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="explore-data-exported-from-fiss.html#cb23-1" aria-hidden="true" tabindex="-1"></a>d_sum_raw <span class="ot">&lt;-</span> <span class="fu">left_join</span>(</span>
+<span id="cb23-2"><a href="explore-data-exported-from-fiss.html#cb23-2" aria-hidden="true" tabindex="-1"></a>  d <span class="sc">%&gt;%</span> <span class="fu">pluck</span>(<span class="st">&#39;counts&#39;</span>),</span>
+<span id="cb23-3"><a href="explore-data-exported-from-fiss.html#cb23-3" aria-hidden="true" tabindex="-1"></a>  d <span class="sc">%&gt;%</span> <span class="fu">pluck</span>(<span class="st">&#39;visits&#39;</span>),</span>
+<span id="cb23-4"><a href="explore-data-exported-from-fiss.html#cb23-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">by =</span> <span class="st">&#39;key&#39;</span></span>
+<span id="cb23-5"><a href="explore-data-exported-from-fiss.html#cb23-5" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span> </span>
+<span id="cb23-6"><a href="explore-data-exported-from-fiss.html#cb23-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(</span>
+<span id="cb23-7"><a href="explore-data-exported-from-fiss.html#cb23-7" aria-hidden="true" tabindex="-1"></a>    .,</span>
+<span id="cb23-8"><a href="explore-data-exported-from-fiss.html#cb23-8" aria-hidden="true" tabindex="-1"></a>    d <span class="sc">%&gt;%</span> <span class="fu">pluck</span>(<span class="st">&#39;habitat&#39;</span>),</span>
+<span id="cb23-9"><a href="explore-data-exported-from-fiss.html#cb23-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">by =</span> <span class="st">&#39;key&#39;</span></span>
+<span id="cb23-10"><a href="explore-data-exported-from-fiss.html#cb23-10" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span> </span>
+<span id="cb23-11"><a href="explore-data-exported-from-fiss.html#cb23-11" aria-hidden="true" tabindex="-1"></a><span class="do">##clean it up and grab a density</span></span>
+<span id="cb23-12"><a href="explore-data-exported-from-fiss.html#cb23-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(fishing_area_length) <span class="sc">&amp;</span> </span>
+<span id="cb23-13"><a href="explore-data-exported-from-fiss.html#cb23-13" aria-hidden="true" tabindex="-1"></a>           fishing_area_length <span class="sc">&gt;</span> <span class="dv">0</span> <span class="sc">&amp;</span></span>
+<span id="cb23-14"><a href="explore-data-exported-from-fiss.html#cb23-14" aria-hidden="true" tabindex="-1"></a>           <span class="sc">!</span><span class="fu">is.na</span>(fishing_area_width) <span class="sc">&amp;</span></span>
+<span id="cb23-15"><a href="explore-data-exported-from-fiss.html#cb23-15" aria-hidden="true" tabindex="-1"></a>           fishing_area_width <span class="sc">&gt;</span> <span class="dv">0</span> <span class="sc">&amp;</span></span>
+<span id="cb23-16"><a href="explore-data-exported-from-fiss.html#cb23-16" aria-hidden="true" tabindex="-1"></a>           <span class="sc">!</span><span class="fu">is.na</span>(utm_easting) <span class="sc">&amp;</span></span>
+<span id="cb23-17"><a href="explore-data-exported-from-fiss.html#cb23-17" aria-hidden="true" tabindex="-1"></a>           <span class="sc">!</span><span class="fu">is.na</span>(utm_northing) <span class="sc">&amp;</span></span>
+<span id="cb23-18"><a href="explore-data-exported-from-fiss.html#cb23-18" aria-hidden="true" tabindex="-1"></a>           utm_zone <span class="sc">&gt;</span> <span class="dv">0</span> <span class="sc">&amp;</span></span>
+<span id="cb23-19"><a href="explore-data-exported-from-fiss.html#cb23-19" aria-hidden="true" tabindex="-1"></a>           <span class="co">#For the sake of a first run lets keep only the first passes from sites that have multiple passes</span></span>
+<span id="cb23-20"><a href="explore-data-exported-from-fiss.html#cb23-20" aria-hidden="true" tabindex="-1"></a>           haul_or_pass <span class="sc">==</span> <span class="dv">1</span> <span class="sc">&amp;</span></span>
+<span id="cb23-21"><a href="explore-data-exported-from-fiss.html#cb23-21" aria-hidden="true" tabindex="-1"></a>           species_code <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">&#39;RB&#39;</span>, <span class="st">&#39;BT&#39;</span>, <span class="st">&#39;GR&#39;</span>, <span class="st">&#39;CH&#39;</span>, <span class="st">&#39;CO&#39;</span>, <span class="st">&#39;SK&#39;</span>, <span class="st">&#39;WCT&#39;</span>, <span class="st">&#39;ST&#39;</span>, <span class="st">&#39;NFC&#39;</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb23-22"><a href="explore-data-exported-from-fiss.html#cb23-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">density_100m =</span> number_caught<span class="sc">/</span>(fishing_area_length <span class="sc">*</span> fishing_area_width) <span class="sc">*</span> <span class="dv">100</span>)</span></code></pre></div>
+<p>Lets review how many occurrences are from the same site - not sure it matters though.</p>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="explore-data-exported-from-fiss.html#cb24-1" aria-hidden="true" tabindex="-1"></a>d_same_site <span class="ot">&lt;-</span> d_sum_raw <span class="sc">%&gt;%</span> </span>
+<span id="cb24-2"><a href="explore-data-exported-from-fiss.html#cb24-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(<span class="fu">across</span>(data_set<span class="sc">:</span>agncy_id)) <span class="sc">%&gt;%</span> </span>
+<span id="cb24-3"><a href="explore-data-exported-from-fiss.html#cb24-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">n =</span> <span class="fu">n</span>()) <span class="sc">%&gt;%</span> </span>
+<span id="cb24-4"><a href="explore-data-exported-from-fiss.html#cb24-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(n <span class="sc">&gt;</span> <span class="dv">1</span>)</span></code></pre></div>
+<p><br></p>
+<p>Lets have a look at what we have by species.</p>
+<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="explore-data-exported-from-fiss.html#cb25-1" aria-hidden="true" tabindex="-1"></a>d_raw_by_sp <span class="ot">&lt;-</span> d_sum_raw <span class="sc">%&gt;%</span> </span>
+<span id="cb25-2"><a href="explore-data-exported-from-fiss.html#cb25-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(species_code) <span class="sc">%&gt;%</span> </span>
+<span id="cb25-3"><a href="explore-data-exported-from-fiss.html#cb25-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">area =</span> fishing_area_length <span class="sc">*</span> fishing_area_width) <span class="sc">%&gt;%</span> </span>
+<span id="cb25-4"><a href="explore-data-exported-from-fiss.html#cb25-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">n =</span> <span class="fu">n</span>(), </span>
+<span id="cb25-5"><a href="explore-data-exported-from-fiss.html#cb25-5" aria-hidden="true" tabindex="-1"></a>            <span class="at">dens_min =</span> <span class="fu">min</span>(density_100m, <span class="at">na.rm =</span> T),</span>
+<span id="cb25-6"><a href="explore-data-exported-from-fiss.html#cb25-6" aria-hidden="true" tabindex="-1"></a>            <span class="at">dens_max =</span> <span class="fu">max</span>(density_100m, <span class="at">na.rm =</span> T),</span>
+<span id="cb25-7"><a href="explore-data-exported-from-fiss.html#cb25-7" aria-hidden="true" tabindex="-1"></a>            <span class="at">dens_med =</span> <span class="fu">median</span>(density_100m, <span class="at">na.rm =</span> T),</span>
+<span id="cb25-8"><a href="explore-data-exported-from-fiss.html#cb25-8" aria-hidden="true" tabindex="-1"></a>            <span class="at">area_min =</span> <span class="fu">min</span>(area, <span class="at">na.rm =</span> T),</span>
+<span id="cb25-9"><a href="explore-data-exported-from-fiss.html#cb25-9" aria-hidden="true" tabindex="-1"></a>            <span class="at">area_max =</span> <span class="fu">max</span>(area, <span class="at">na.rm =</span> T),</span>
+<span id="cb25-10"><a href="explore-data-exported-from-fiss.html#cb25-10" aria-hidden="true" tabindex="-1"></a>            <span class="at">area_med =</span> <span class="fu">median</span>(area, <span class="at">na.rm =</span> T),</span>
+<span id="cb25-11"><a href="explore-data-exported-from-fiss.html#cb25-11" aria-hidden="true" tabindex="-1"></a>            <span class="at">len_min =</span> <span class="fu">min</span>(fishing_area_length, <span class="at">na.rm =</span> T),</span>
+<span id="cb25-12"><a href="explore-data-exported-from-fiss.html#cb25-12" aria-hidden="true" tabindex="-1"></a>            <span class="at">len_max =</span> <span class="fu">max</span>(fishing_area_length, <span class="at">na.rm =</span> T),</span>
+<span id="cb25-13"><a href="explore-data-exported-from-fiss.html#cb25-13" aria-hidden="true" tabindex="-1"></a>            <span class="at">len_med =</span> <span class="fu">median</span>(fishing_area_length, <span class="at">na.rm =</span> T),</span>
+<span id="cb25-14"><a href="explore-data-exported-from-fiss.html#cb25-14" aria-hidden="true" tabindex="-1"></a>            <span class="at">wid_min =</span> <span class="fu">min</span>(fishing_area_width, <span class="at">na.rm =</span> T),</span>
+<span id="cb25-15"><a href="explore-data-exported-from-fiss.html#cb25-15" aria-hidden="true" tabindex="-1"></a>            <span class="at">wid_max =</span> <span class="fu">max</span>(fishing_area_width, <span class="at">na.rm =</span> T),</span>
+<span id="cb25-16"><a href="explore-data-exported-from-fiss.html#cb25-16" aria-hidden="true" tabindex="-1"></a>            <span class="at">wid_med =</span> <span class="fu">median</span>(fishing_area_width, <span class="at">na.rm =</span> T))</span>
+<span id="cb25-17"><a href="explore-data-exported-from-fiss.html#cb25-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-18"><a href="explore-data-exported-from-fiss.html#cb25-18" aria-hidden="true" tabindex="-1"></a>d_raw_by_sp</span></code></pre></div>
+<pre><code>## # A tibble: 9 x 14
+##   species_code     n   dens_min dens_max dens_med area_min  area_max area_med len_min len_max len_med wid_min wid_max wid_med
+##   &lt;chr&gt;        &lt;int&gt;      &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;
+## 1 BT            4398 0.00000500     200     0.571     1    99980001      390      1     9999    100       0.5 10000.      5  
+## 2 CH            1303 0.000182       848.    2.5       1      549994.     240      1     1600     80       0.7 10000.      3  
+## 3 CO            3393 0.00855       6292.    6         0.72   549994.     112      1     1950     30       0.3 10000.      3  
+## 4 GR             770 0.00110        125     0.333    20       91200      600      5     3000    150       0.5   708       4  
+## 5 NFC          23136 0                0     0         0.1  99998000.     200      0.5  10000.   110       0.1 10000.      1.5
+## 6 RB           14500 0            14700     1.33      1    99998000.     250      1    10000.   100       0.1 10000.      4  
+## 7 SK              80 0.0182         103.    0.558    31        5500      240     16     1600     80       1      20       3  
+## 8 ST             415 0.0286         382.    7.34     31.3      7500      104.     6     1000     17.5     1.3    61.8     6  
+## 9 WCT           2240 0              310     1.2       2     7969920.     250      2     3443    100       0.5 10000.      4</code></pre>
+<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb27-1"><a href="explore-data-exported-from-fiss.html#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="fu">select</span>(d_sum_raw, fishing_area_length), <span class="fu">aes</span>(<span class="at">x=</span>fishing_area_length)) <span class="sc">+</span></span>
+<span id="cb27-2"><a href="explore-data-exported-from-fiss.html#cb27-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="at">position=</span><span class="st">&quot;identity&quot;</span>, <span class="at">size =</span> <span class="fl">0.75</span>)<span class="sc">+</span></span>
+<span id="cb27-3"><a href="explore-data-exported-from-fiss.html#cb27-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;fishing_area_length&quot;</span>, <span class="at">y =</span> <span class="st">&quot;#&quot;</span>) <span class="sc">+</span></span>
+<span id="cb27-4"><a href="explore-data-exported-from-fiss.html#cb27-4" aria-hidden="true" tabindex="-1"></a>  ggdark<span class="sc">::</span><span class="fu">dark_theme_bw</span>(<span class="at">base_size =</span> <span class="dv">11</span>)</span></code></pre></div>
+<p><img src="Template_files/figure-html/unnamed-chunk-34-1.png" width="100%" /></p>
+<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb28-1"><a href="explore-data-exported-from-fiss.html#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="fu">select</span>(d_sum_raw, fishing_area_width), <span class="fu">aes</span>(<span class="at">x=</span>fishing_area_width)) <span class="sc">+</span></span>
+<span id="cb28-2"><a href="explore-data-exported-from-fiss.html#cb28-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="at">position=</span><span class="st">&quot;identity&quot;</span>, <span class="at">size =</span> <span class="fl">0.75</span>)<span class="sc">+</span></span>
+<span id="cb28-3"><a href="explore-data-exported-from-fiss.html#cb28-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;fishing_area_width&quot;</span>, <span class="at">y =</span> <span class="st">&quot;#&quot;</span>) <span class="sc">+</span></span>
+<span id="cb28-4"><a href="explore-data-exported-from-fiss.html#cb28-4" aria-hidden="true" tabindex="-1"></a>  ggdark<span class="sc">::</span><span class="fu">dark_theme_bw</span>(<span class="at">base_size =</span> <span class="dv">11</span>)</span></code></pre></div>
+<p><img src="Template_files/figure-html/unnamed-chunk-35-1.png" width="100%" /></p>
+<p>Lets trim out our strange numbers for the site sizes</p>
+<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb29-1"><a href="explore-data-exported-from-fiss.html#cb29-1" aria-hidden="true" tabindex="-1"></a>d_sum <span class="ot">&lt;-</span> <span class="fu">left_join</span>(</span>
+<span id="cb29-2"><a href="explore-data-exported-from-fiss.html#cb29-2" aria-hidden="true" tabindex="-1"></a>  d <span class="sc">%&gt;%</span> <span class="fu">pluck</span>(<span class="st">&#39;counts&#39;</span>),</span>
+<span id="cb29-3"><a href="explore-data-exported-from-fiss.html#cb29-3" aria-hidden="true" tabindex="-1"></a>  d <span class="sc">%&gt;%</span> <span class="fu">pluck</span>(<span class="st">&#39;visits&#39;</span>),</span>
+<span id="cb29-4"><a href="explore-data-exported-from-fiss.html#cb29-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">by =</span> <span class="st">&#39;key&#39;</span></span>
+<span id="cb29-5"><a href="explore-data-exported-from-fiss.html#cb29-5" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span> </span>
+<span id="cb29-6"><a href="explore-data-exported-from-fiss.html#cb29-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(</span>
+<span id="cb29-7"><a href="explore-data-exported-from-fiss.html#cb29-7" aria-hidden="true" tabindex="-1"></a>    .,</span>
+<span id="cb29-8"><a href="explore-data-exported-from-fiss.html#cb29-8" aria-hidden="true" tabindex="-1"></a>    d <span class="sc">%&gt;%</span> <span class="fu">pluck</span>(<span class="st">&#39;habitat&#39;</span>),</span>
+<span id="cb29-9"><a href="explore-data-exported-from-fiss.html#cb29-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">by =</span> <span class="st">&#39;key&#39;</span></span>
+<span id="cb29-10"><a href="explore-data-exported-from-fiss.html#cb29-10" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span> </span>
+<span id="cb29-11"><a href="explore-data-exported-from-fiss.html#cb29-11" aria-hidden="true" tabindex="-1"></a><span class="do">##clean it up and grab a density</span></span>
+<span id="cb29-12"><a href="explore-data-exported-from-fiss.html#cb29-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(fishing_area_length) <span class="sc">&amp;</span> </span>
+<span id="cb29-13"><a href="explore-data-exported-from-fiss.html#cb29-13" aria-hidden="true" tabindex="-1"></a>           fishing_area_length <span class="sc">&gt;</span> <span class="fl">0.9</span> <span class="sc">&amp;</span></span>
+<span id="cb29-14"><a href="explore-data-exported-from-fiss.html#cb29-14" aria-hidden="true" tabindex="-1"></a>           fishing_area_length <span class="sc">&lt;</span> <span class="fl">500.1</span> <span class="sc">&amp;</span></span>
+<span id="cb29-15"><a href="explore-data-exported-from-fiss.html#cb29-15" aria-hidden="true" tabindex="-1"></a>           <span class="sc">!</span><span class="fu">is.na</span>(fishing_area_width) <span class="sc">&amp;</span></span>
+<span id="cb29-16"><a href="explore-data-exported-from-fiss.html#cb29-16" aria-hidden="true" tabindex="-1"></a>           fishing_area_width <span class="sc">&gt;</span> <span class="fl">0.5</span> <span class="sc">&amp;</span></span>
+<span id="cb29-17"><a href="explore-data-exported-from-fiss.html#cb29-17" aria-hidden="true" tabindex="-1"></a>           fishing_area_width <span class="sc">&lt;</span> <span class="fl">25.1</span> <span class="sc">&amp;</span></span>
+<span id="cb29-18"><a href="explore-data-exported-from-fiss.html#cb29-18" aria-hidden="true" tabindex="-1"></a>           <span class="sc">!</span><span class="fu">is.na</span>(utm_easting) <span class="sc">&amp;</span></span>
+<span id="cb29-19"><a href="explore-data-exported-from-fiss.html#cb29-19" aria-hidden="true" tabindex="-1"></a>           <span class="sc">!</span><span class="fu">is.na</span>(utm_northing) <span class="sc">&amp;</span></span>
+<span id="cb29-20"><a href="explore-data-exported-from-fiss.html#cb29-20" aria-hidden="true" tabindex="-1"></a>           utm_zone <span class="sc">&gt;</span> <span class="dv">0</span> <span class="sc">&amp;</span></span>
+<span id="cb29-21"><a href="explore-data-exported-from-fiss.html#cb29-21" aria-hidden="true" tabindex="-1"></a>           <span class="co">#For the sake of a first run lets keep only the first passes from sites that have multiple passes</span></span>
+<span id="cb29-22"><a href="explore-data-exported-from-fiss.html#cb29-22" aria-hidden="true" tabindex="-1"></a>           haul_or_pass <span class="sc">==</span> <span class="dv">1</span> <span class="sc">&amp;</span></span>
+<span id="cb29-23"><a href="explore-data-exported-from-fiss.html#cb29-23" aria-hidden="true" tabindex="-1"></a>           species_code <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">&#39;RB&#39;</span>, <span class="st">&#39;BT&#39;</span>, <span class="st">&#39;GR&#39;</span>, <span class="st">&#39;CH&#39;</span>, <span class="st">&#39;CO&#39;</span>, <span class="st">&#39;SK&#39;</span>, <span class="st">&#39;WCT&#39;</span>, <span class="st">&#39;ST&#39;</span>, <span class="st">&#39;NFC&#39;</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb29-24"><a href="explore-data-exported-from-fiss.html#cb29-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">density_100m =</span> number_caught<span class="sc">/</span>(fishing_area_length <span class="sc">*</span> fishing_area_width) <span class="sc">*</span> <span class="dv">100</span>)</span>
+<span id="cb29-25"><a href="explore-data-exported-from-fiss.html#cb29-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-26"><a href="explore-data-exported-from-fiss.html#cb29-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-27"><a href="explore-data-exported-from-fiss.html#cb29-27" aria-hidden="true" tabindex="-1"></a><span class="do">##have another look at it</span></span>
+<span id="cb29-28"><a href="explore-data-exported-from-fiss.html#cb29-28" aria-hidden="true" tabindex="-1"></a>d_by_sp <span class="ot">&lt;-</span> d_sum <span class="sc">%&gt;%</span> </span>
+<span id="cb29-29"><a href="explore-data-exported-from-fiss.html#cb29-29" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(species_code) <span class="sc">%&gt;%</span> </span>
+<span id="cb29-30"><a href="explore-data-exported-from-fiss.html#cb29-30" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">area =</span> fishing_area_length <span class="sc">*</span> fishing_area_width) <span class="sc">%&gt;%</span> </span>
+<span id="cb29-31"><a href="explore-data-exported-from-fiss.html#cb29-31" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">n =</span> <span class="fu">n</span>(), </span>
+<span id="cb29-32"><a href="explore-data-exported-from-fiss.html#cb29-32" aria-hidden="true" tabindex="-1"></a>            <span class="at">dens_min =</span> <span class="fu">min</span>(density_100m, <span class="at">na.rm =</span> T),</span>
+<span id="cb29-33"><a href="explore-data-exported-from-fiss.html#cb29-33" aria-hidden="true" tabindex="-1"></a>            <span class="at">dens_max =</span> <span class="fu">max</span>(density_100m, <span class="at">na.rm =</span> T),</span>
+<span id="cb29-34"><a href="explore-data-exported-from-fiss.html#cb29-34" aria-hidden="true" tabindex="-1"></a>            <span class="at">dens_med =</span> <span class="fu">median</span>(density_100m, <span class="at">na.rm =</span> T),</span>
+<span id="cb29-35"><a href="explore-data-exported-from-fiss.html#cb29-35" aria-hidden="true" tabindex="-1"></a>            <span class="at">area_min =</span> <span class="fu">min</span>(area, <span class="at">na.rm =</span> T),</span>
+<span id="cb29-36"><a href="explore-data-exported-from-fiss.html#cb29-36" aria-hidden="true" tabindex="-1"></a>            <span class="at">area_max =</span> <span class="fu">max</span>(area, <span class="at">na.rm =</span> T),</span>
+<span id="cb29-37"><a href="explore-data-exported-from-fiss.html#cb29-37" aria-hidden="true" tabindex="-1"></a>            <span class="at">area_med =</span> <span class="fu">median</span>(area, <span class="at">na.rm =</span> T),</span>
+<span id="cb29-38"><a href="explore-data-exported-from-fiss.html#cb29-38" aria-hidden="true" tabindex="-1"></a>            <span class="at">len_min =</span> <span class="fu">min</span>(fishing_area_length, <span class="at">na.rm =</span> T),</span>
+<span id="cb29-39"><a href="explore-data-exported-from-fiss.html#cb29-39" aria-hidden="true" tabindex="-1"></a>            <span class="at">len_max =</span> <span class="fu">max</span>(fishing_area_length, <span class="at">na.rm =</span> T),</span>
+<span id="cb29-40"><a href="explore-data-exported-from-fiss.html#cb29-40" aria-hidden="true" tabindex="-1"></a>            <span class="at">len_med =</span> <span class="fu">median</span>(fishing_area_length, <span class="at">na.rm =</span> T),</span>
+<span id="cb29-41"><a href="explore-data-exported-from-fiss.html#cb29-41" aria-hidden="true" tabindex="-1"></a>            <span class="at">wid_min =</span> <span class="fu">min</span>(fishing_area_width, <span class="at">na.rm =</span> T),</span>
+<span id="cb29-42"><a href="explore-data-exported-from-fiss.html#cb29-42" aria-hidden="true" tabindex="-1"></a>            <span class="at">wid_max =</span> <span class="fu">max</span>(fishing_area_width, <span class="at">na.rm =</span> T),</span>
+<span id="cb29-43"><a href="explore-data-exported-from-fiss.html#cb29-43" aria-hidden="true" tabindex="-1"></a>            <span class="at">wid_med =</span> <span class="fu">median</span>(fishing_area_width, <span class="at">na.rm =</span> T))</span>
+<span id="cb29-44"><a href="explore-data-exported-from-fiss.html#cb29-44" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-45"><a href="explore-data-exported-from-fiss.html#cb29-45" aria-hidden="true" tabindex="-1"></a>d_by_sp  </span></code></pre></div>
+<pre><code>## # A tibble: 9 x 14
+##   species_code     n dens_min dens_max dens_med area_min area_max area_med len_min len_max len_med wid_min wid_max wid_med
+##   &lt;chr&gt;        &lt;int&gt;    &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;
+## 1 BT            3956  0.01        200     0.667     1       10000     300        1     500   100       0.6    25       4.7
+## 2 CH            1282  0.0268      848.    2.60      1        8000     240        1     500    80       0.7    25       3  
+## 3 CO            3298  0.0291     6292.    6.25      0.72     7500     108.       1     500    30       0.6    25       3  
+## 4 GR             658  0.00833     125     0.447    20       12000     498.       5     500   150       0.7    25       3.3
+## 5 NFC          20100  0             0     0         1       12500     200        1     500   107       0.6    25       1.6
+## 6 RB           13299  0         14700     1.58      1       12000     220        1     500   100       0.6    25       3.9
+## 7 SK              79  0.0182      103.    0.556    31        5500     240       16     400    80       1      20       3  
+## 8 ST             397  0.112       382.    8.4      31.3      5000     102        6     410    17.1     1.3    20.4     6  
+## 9 WCT           2137  0           310     1.26      2        6460     230        2     500   100       0.6    25       4</code></pre>
+<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb31-1"><a href="explore-data-exported-from-fiss.html#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="fu">select</span>(d_sum, fishing_area_length), <span class="fu">aes</span>(<span class="at">x=</span>fishing_area_length)) <span class="sc">+</span></span>
+<span id="cb31-2"><a href="explore-data-exported-from-fiss.html#cb31-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="at">position=</span><span class="st">&quot;identity&quot;</span>, <span class="at">size =</span> <span class="fl">0.75</span>)<span class="sc">+</span></span>
+<span id="cb31-3"><a href="explore-data-exported-from-fiss.html#cb31-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;fishing_area_length&quot;</span>, <span class="at">y =</span> <span class="st">&quot;#&quot;</span>) <span class="sc">+</span></span>
+<span id="cb31-4"><a href="explore-data-exported-from-fiss.html#cb31-4" aria-hidden="true" tabindex="-1"></a>  ggdark<span class="sc">::</span><span class="fu">dark_theme_bw</span>(<span class="at">base_size =</span> <span class="dv">11</span>)</span></code></pre></div>
+<p><img src="Template_files/figure-html/unnamed-chunk-37-1.png" width="100%" /></p>
+<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb32-1"><a href="explore-data-exported-from-fiss.html#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="fu">select</span>(d_sum, fishing_area_width), <span class="fu">aes</span>(<span class="at">x=</span>fishing_area_width)) <span class="sc">+</span></span>
+<span id="cb32-2"><a href="explore-data-exported-from-fiss.html#cb32-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="at">position=</span><span class="st">&quot;identity&quot;</span>, <span class="at">size =</span> <span class="fl">0.75</span>)<span class="sc">+</span></span>
+<span id="cb32-3"><a href="explore-data-exported-from-fiss.html#cb32-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;fishing_area_width&quot;</span>, <span class="at">y =</span> <span class="st">&quot;#&quot;</span>) <span class="sc">+</span></span>
+<span id="cb32-4"><a href="explore-data-exported-from-fiss.html#cb32-4" aria-hidden="true" tabindex="-1"></a>  ggdark<span class="sc">::</span><span class="fu">dark_theme_bw</span>(<span class="at">base_size =</span> <span class="dv">11</span>)</span></code></pre></div>
+<p><img src="Template_files/figure-html/unnamed-chunk-38-1.png" width="100%" /></p>
+<p><br></p>
+<p>What do the small sites look like? Should we keep them?</p>
+<div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb33-1"><a href="explore-data-exported-from-fiss.html#cb33-1" aria-hidden="true" tabindex="-1"></a>length_cut <span class="ot">&lt;-</span> <span class="dv">10</span></span>
+<span id="cb33-2"><a href="explore-data-exported-from-fiss.html#cb33-2" aria-hidden="true" tabindex="-1"></a>width_cut <span class="ot">&lt;-</span> <span class="dv">1</span></span>
+<span id="cb33-3"><a href="explore-data-exported-from-fiss.html#cb33-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-4"><a href="explore-data-exported-from-fiss.html#cb33-4" aria-hidden="true" tabindex="-1"></a>sites_small <span class="ot">&lt;-</span> d_sum <span class="sc">%&gt;%</span></span>
+<span id="cb33-5"><a href="explore-data-exported-from-fiss.html#cb33-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(fishing_area_length <span class="sc">&lt;</span> length_cut <span class="sc">|</span></span>
+<span id="cb33-6"><a href="explore-data-exported-from-fiss.html#cb33-6" aria-hidden="true" tabindex="-1"></a>           fishing_area_width <span class="sc">&lt;</span> width_cut) <span class="sc">%&gt;%</span> </span>
+<span id="cb33-7"><a href="explore-data-exported-from-fiss.html#cb33-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">wettedwidth_ave =</span> <span class="fu">rowMeans</span>(<span class="fu">select</span>(., <span class="fu">starts_with</span>(<span class="st">&quot;wetted&quot;</span>)), <span class="at">na.rm =</span> <span class="cn">TRUE</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb33-8"><a href="explore-data-exported-from-fiss.html#cb33-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(fishing_area_length, fishing_area_width, wettedwidth_ave)</span>
+<span id="cb33-9"><a href="explore-data-exported-from-fiss.html#cb33-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-10"><a href="explore-data-exported-from-fiss.html#cb33-10" aria-hidden="true" tabindex="-1"></a>sites_small</span></code></pre></div>
+<pre><code>## # A tibble: 5,067 x 3
+##    fishing_area_length fishing_area_width wettedwidth_ave
+##                  &lt;dbl&gt;              &lt;dbl&gt;           &lt;dbl&gt;
+##  1                   8                4               NaN
+##  2                   8                4               NaN
+##  3                   5                2               NaN
+##  4                   5                5               NaN
+##  5                 100                0.8             NaN
+##  6                 200                0.9             NaN
+##  7                 200                0.7             NaN
+##  8                 200                0.8             NaN
+##  9                 200                0.7             NaN
+## 10                 200                0.9             NaN
+## # ... with 5,057 more rows</code></pre>
+<p><br></p>
+<p>These are small sites that have associated wetted widths</p>
+<div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb35-1"><a href="explore-data-exported-from-fiss.html#cb35-1" aria-hidden="true" tabindex="-1"></a>sites_small <span class="sc">%&gt;%</span> </span>
+<span id="cb35-2"><a href="explore-data-exported-from-fiss.html#cb35-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(wettedwidth_ave))</span></code></pre></div>
+<pre><code>## # A tibble: 2,125 x 3
+##    fishing_area_length fishing_area_width wettedwidth_ave
+##                  &lt;dbl&gt;              &lt;dbl&gt;           &lt;dbl&gt;
+##  1                  80                0.7           0.717
+##  2                  67                0.7           0.643
+##  3                 100                0.7           0.867
+##  4                 100                0.8           0.843
+##  5                 100                0.8           0.795
+##  6                 100                0.6           0.8  
+##  7                 100                0.9           0.947
+##  8                 200                0.8           0.783
+##  9                 100                0.6           0.617
+## 10                 100                0.9           0.867
+## # ... with 2,115 more rows</code></pre>
+<div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb37-1"><a href="explore-data-exported-from-fiss.html#cb37-1" aria-hidden="true" tabindex="-1"></a>sites_small_len <span class="ot">&lt;-</span> sites_small <span class="sc">%&gt;%</span> </span>
+<span id="cb37-2"><a href="explore-data-exported-from-fiss.html#cb37-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(fishing_area_length <span class="sc">&lt;</span> length_cut)</span>
+<span id="cb37-3"><a href="explore-data-exported-from-fiss.html#cb37-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-4"><a href="explore-data-exported-from-fiss.html#cb37-4" aria-hidden="true" tabindex="-1"></a>sites_small_len</span></code></pre></div>
+<pre><code>## # A tibble: 2,266 x 3
+##    fishing_area_length fishing_area_width wettedwidth_ave
+##                  &lt;dbl&gt;              &lt;dbl&gt;           &lt;dbl&gt;
+##  1                   8                  4             NaN
+##  2                   8                  4             NaN
+##  3                   5                  2             NaN
+##  4                   5                  5             NaN
+##  5                   1                  1             NaN
+##  6                   3                  1             NaN
+##  7                   4                  7             NaN
+##  8                   7                  3             NaN
+##  9                   7                  3             NaN
+## 10                   9                  8             NaN
+## # ... with 2,256 more rows</code></pre>
+<p><br></p>
+<p>Distribution of sites with small lengths</p>
+<div class="sourceCode" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb39-1"><a href="explore-data-exported-from-fiss.html#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="fu">select</span>(sites_small_len, fishing_area_length), <span class="fu">aes</span>(<span class="at">x=</span>fishing_area_length)) <span class="sc">+</span></span>
+<span id="cb39-2"><a href="explore-data-exported-from-fiss.html#cb39-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="at">position=</span><span class="st">&quot;identity&quot;</span>, <span class="at">size =</span> <span class="fl">0.75</span>)<span class="sc">+</span></span>
+<span id="cb39-3"><a href="explore-data-exported-from-fiss.html#cb39-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;fishing_area_length&quot;</span>, <span class="at">y =</span> <span class="st">&quot;#&quot;</span>) <span class="sc">+</span></span>
+<span id="cb39-4"><a href="explore-data-exported-from-fiss.html#cb39-4" aria-hidden="true" tabindex="-1"></a>  ggdark<span class="sc">::</span><span class="fu">dark_theme_bw</span>(<span class="at">base_size =</span> <span class="dv">11</span>)</span></code></pre></div>
+<p><img src="Template_files/figure-html/unnamed-chunk-42-1.png" width="100%" /></p>
+<p><br></p>
+<p>Sites with small widths</p>
+<div class="sourceCode" id="cb40"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb40-1"><a href="explore-data-exported-from-fiss.html#cb40-1" aria-hidden="true" tabindex="-1"></a>sites_small_wid <span class="ot">&lt;-</span> sites_small <span class="sc">%&gt;%</span> </span>
+<span id="cb40-2"><a href="explore-data-exported-from-fiss.html#cb40-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(fishing_area_width <span class="sc">&lt;</span> width_cut)</span>
+<span id="cb40-3"><a href="explore-data-exported-from-fiss.html#cb40-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb40-4"><a href="explore-data-exported-from-fiss.html#cb40-4" aria-hidden="true" tabindex="-1"></a>sites_small_wid</span></code></pre></div>
+<pre><code>## # A tibble: 2,815 x 3
+##    fishing_area_length fishing_area_width wettedwidth_ave
+##                  &lt;dbl&gt;              &lt;dbl&gt;           &lt;dbl&gt;
+##  1                 100                0.8         NaN    
+##  2                 200                0.9         NaN    
+##  3                 200                0.7         NaN    
+##  4                 200                0.8         NaN    
+##  5                 200                0.7         NaN    
+##  6                 200                0.9         NaN    
+##  7                 200                0.8         NaN    
+##  8                 250                0.6         NaN    
+##  9                  80                0.7           0.717
+## 10                  67                0.7           0.643
+## # ... with 2,805 more rows</code></pre>
+<p><br></p>
+<p>Distribution of sites with small widths. Are these sites where it was a presence/absence test so maybe not suitable for density modelling? Don’t know…</p>
+<div class="sourceCode" id="cb42"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb42-1"><a href="explore-data-exported-from-fiss.html#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="fu">select</span>(sites_small_wid, fishing_area_width), <span class="fu">aes</span>(<span class="at">x=</span>fishing_area_width)) <span class="sc">+</span></span>
+<span id="cb42-2"><a href="explore-data-exported-from-fiss.html#cb42-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="at">position=</span><span class="st">&quot;identity&quot;</span>, <span class="at">size =</span> <span class="fl">0.75</span>)<span class="sc">+</span></span>
+<span id="cb42-3"><a href="explore-data-exported-from-fiss.html#cb42-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;fishing_area_width&quot;</span>, <span class="at">y =</span> <span class="st">&quot;#&quot;</span>) <span class="sc">+</span></span>
+<span id="cb42-4"><a href="explore-data-exported-from-fiss.html#cb42-4" aria-hidden="true" tabindex="-1"></a>  ggdark<span class="sc">::</span><span class="fu">dark_theme_bw</span>(<span class="at">base_size =</span> <span class="dv">11</span>)</span></code></pre></div>
+<p><img src="Template_files/figure-html/unnamed-chunk-44-1.png" width="100%" /></p>
+
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="explore-fwa-streams.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="make-fiss-data-spatial.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"whatsapp": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "night",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": ["Template.pdf", "Template.html"],
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+</body>
+
+</html>

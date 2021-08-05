@@ -1,0 +1,263 @@
+
+
+# Explore Data Exported from FISS
+Purpose of this section is to explore the species density data provided in csv format from the province.  We would like to be able to tie density of fish species to habitat characteristics including gradient, channel size, discharge, elevation, forest cover, etc.
+
+
+Load the data from the dropbox
+
+
+```{r}
+
+
+shared_dropbox_dir <- "C:/Users/al/Dropbox/New Graph/"
+
+
+files_to_read <- list.files(paste0(shared_dropbox_dir,"fiss/2020-11-16/"), full.names = T)
+files_names <- list.files(paste0(shared_dropbox_dir,"fiss/2020-11-16/"), full.names = F) %>% tools::file_path_sans_ext()
+
+
+##mini function to change column names to lower case
+names_to_lower <- function(dat){
+  dat %>% 
+  purrr::set_names(nm = stringr::str_to_lower(names(dat)))
+}
+
+
+d <- files_to_read %>% 
+  map(readr::read_csv) %>% 
+  map(names_to_lower) %>% 
+  purrr::set_names(nm = files_names)
+
+```
+
+
+```{r eval = F}
+##pull out the tibbles
+details <- d %>% pluck('details')
+visits <- d %>% pluck('visits')
+habitat <- d %>% pluck('habitat')
+counts <- d %>% pluck('counts')
+```
+
+Make a table that has all the info we want in one place for the summarized fish
+
+```{r}
+d_sum_raw <- left_join(
+  d %>% pluck('counts'),
+  d %>% pluck('visits'),
+  by = 'key'
+  ) %>% 
+  left_join(
+    .,
+    d %>% pluck('habitat'),
+    by = 'key'
+  ) %>% 
+##clean it up and grab a density
+  filter(!is.na(fishing_area_length) & 
+           fishing_area_length > 0 &
+           !is.na(fishing_area_width) &
+           fishing_area_width > 0 &
+           !is.na(utm_easting) &
+           !is.na(utm_northing) &
+           utm_zone > 0 &
+           #For the sake of a first run lets keep only the first passes from sites that have multiple passes
+           haul_or_pass == 1 &
+           species_code %in% c('RB', 'BT', 'GR', 'CH', 'CO', 'SK', 'WCT', 'ST', 'NFC')) %>%
+  mutate(density_100m = number_caught/(fishing_area_length * fishing_area_width) * 100)
+  
+```
+
+
+
+
+Lets review how many occurrences are from the same site - not sure it matters though.
+```{r}
+d_same_site <- d_sum_raw %>% 
+  group_by(across(data_set:agncy_id)) %>% 
+  summarise(n = n()) %>% 
+  filter(n > 1)
+  
+```
+
+<br>
+
+Lets have a look at what we have by species.
+```{r}
+d_raw_by_sp <- d_sum_raw %>% 
+  group_by(species_code) %>% 
+  mutate(area = fishing_area_length * fishing_area_width) %>% 
+  summarise(n = n(), 
+            dens_min = min(density_100m, na.rm = T),
+            dens_max = max(density_100m, na.rm = T),
+            dens_med = median(density_100m, na.rm = T),
+            area_min = min(area, na.rm = T),
+            area_max = max(area, na.rm = T),
+            area_med = median(area, na.rm = T),
+            len_min = min(fishing_area_length, na.rm = T),
+            len_max = max(fishing_area_length, na.rm = T),
+            len_med = median(fishing_area_length, na.rm = T),
+            wid_min = min(fishing_area_width, na.rm = T),
+            wid_max = max(fishing_area_width, na.rm = T),
+            wid_med = median(fishing_area_width, na.rm = T))
+
+d_raw_by_sp
+```
+
+
+```{r}
+ggplot(select(d_sum_raw, fishing_area_length), aes(x=fishing_area_length)) +
+  geom_histogram(position="identity", size = 0.75)+
+  labs(x = "fishing_area_length", y = "#") +
+  ggdark::dark_theme_bw(base_size = 11)
+
+```
+
+```{r}
+ggplot(select(d_sum_raw, fishing_area_width), aes(x=fishing_area_width)) +
+  geom_histogram(position="identity", size = 0.75)+
+  labs(x = "fishing_area_width", y = "#") +
+  ggdark::dark_theme_bw(base_size = 11)
+
+```
+
+
+Lets trim out our strange numbers for the site sizes
+
+
+```{r}
+d_sum <- left_join(
+  d %>% pluck('counts'),
+  d %>% pluck('visits'),
+  by = 'key'
+  ) %>% 
+  left_join(
+    .,
+    d %>% pluck('habitat'),
+    by = 'key'
+  ) %>% 
+##clean it up and grab a density
+  filter(!is.na(fishing_area_length) & 
+           fishing_area_length > 0.9 &
+           fishing_area_length < 500.1 &
+           !is.na(fishing_area_width) &
+           fishing_area_width > 0.5 &
+           fishing_area_width < 25.1 &
+           !is.na(utm_easting) &
+           !is.na(utm_northing) &
+           utm_zone > 0 &
+           #For the sake of a first run lets keep only the first passes from sites that have multiple passes
+           haul_or_pass == 1 &
+           species_code %in% c('RB', 'BT', 'GR', 'CH', 'CO', 'SK', 'WCT', 'ST', 'NFC')) %>%
+  mutate(density_100m = number_caught/(fishing_area_length * fishing_area_width) * 100)
+
+
+##have another look at it
+d_by_sp <- d_sum %>% 
+  group_by(species_code) %>% 
+  mutate(area = fishing_area_length * fishing_area_width) %>% 
+  summarise(n = n(), 
+            dens_min = min(density_100m, na.rm = T),
+            dens_max = max(density_100m, na.rm = T),
+            dens_med = median(density_100m, na.rm = T),
+            area_min = min(area, na.rm = T),
+            area_max = max(area, na.rm = T),
+            area_med = median(area, na.rm = T),
+            len_min = min(fishing_area_length, na.rm = T),
+            len_max = max(fishing_area_length, na.rm = T),
+            len_med = median(fishing_area_length, na.rm = T),
+            wid_min = min(fishing_area_width, na.rm = T),
+            wid_max = max(fishing_area_width, na.rm = T),
+            wid_med = median(fishing_area_width, na.rm = T))
+
+d_by_sp  
+```
+
+
+
+```{r}
+ggplot(select(d_sum, fishing_area_length), aes(x=fishing_area_length)) +
+  geom_histogram(position="identity", size = 0.75)+
+  labs(x = "fishing_area_length", y = "#") +
+  ggdark::dark_theme_bw(base_size = 11)
+
+```
+
+```{r}
+ggplot(select(d_sum, fishing_area_width), aes(x=fishing_area_width)) +
+  geom_histogram(position="identity", size = 0.75)+
+  labs(x = "fishing_area_width", y = "#") +
+  ggdark::dark_theme_bw(base_size = 11)
+
+```
+
+<br>
+
+What do the small sites look like?  Should we keep them?
+
+```{r}
+
+length_cut <- 10
+width_cut <- 1
+
+sites_small <- d_sum %>%
+  filter(fishing_area_length < length_cut |
+           fishing_area_width < width_cut) %>% 
+  mutate(wettedwidth_ave = rowMeans(select(., starts_with("wetted")), na.rm = TRUE)) %>% 
+  select(fishing_area_length, fishing_area_width, wettedwidth_ave)
+
+sites_small
+```
+
+<br>
+
+These are small sites that have associated wetted widths
+
+```{r}
+sites_small %>% 
+  filter(!is.na(wettedwidth_ave))
+```
+
+```{r}
+sites_small_len <- sites_small %>% 
+  filter(fishing_area_length < length_cut)
+
+sites_small_len
+```
+<br>
+
+Distribution of sites with small lengths 
+```{r}
+ggplot(select(sites_small_len, fishing_area_length), aes(x=fishing_area_length)) +
+  geom_histogram(position="identity", size = 0.75)+
+  labs(x = "fishing_area_length", y = "#") +
+  ggdark::dark_theme_bw(base_size = 11)
+
+```
+
+
+<br>
+
+Sites with small widths
+
+```{r}
+sites_small_wid <- sites_small %>% 
+  filter(fishing_area_width < width_cut)
+
+sites_small_wid
+```
+
+<br>
+
+Distribution of sites with small widths.  Are these sites where it was a presence/absence test so maybe not suitable for density modelling? Don't know...
+```{r}
+ggplot(select(sites_small_wid, fishing_area_width), aes(x=fishing_area_width)) +
+  geom_histogram(position="identity", size = 0.75)+
+  labs(x = "fishing_area_width", y = "#") +
+  ggdark::dark_theme_bw(base_size = 11)
+
+```
+
+
+
+
