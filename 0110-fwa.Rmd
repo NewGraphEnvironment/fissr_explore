@@ -32,10 +32,10 @@ streams <- sf::st_read(conn, query = q)
 
 
 
-## In order to facilitate reproducability lets save the streams in a sqlite and pull them back in.
+##  the streams in a sqlite and pull them back in.
 
 ##########################!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!#########################
-###change this up so that it matches your version of the dropbox!
+###change this up so that it matches your version of the ahred dropbox!
 shared_dropbox_dir <- "C:/Users/al/Dropbox/New Graph/"
 
 
