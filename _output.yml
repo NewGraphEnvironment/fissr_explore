@@ -6,7 +6,7 @@ bookdown::gitbook:
       before: |
         <li><a href="./">Linking Fish Density to Habitat Characteristics</a></li>
       after: |
-        <li><a href="https://github.com/NewGraphEnvironment/mybookdown-template" target="blank">Scripts and Data</a></li>
+        <li><a href="https://github.com/NewGraphEnvironment/fissr_explore" target="blank">Scripts and Data</a></li>
     download: ["Template.pdf", "Template.html"]
     fontsettings:
       theme: night
