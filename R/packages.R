@@ -6,38 +6,38 @@ pacman::p_load(
   sf,
   readxl,
   janitor,
-  leafem,
-  leaflet,
-  plotKML,
-  kableExtra,
-  httr,
+  # leafem,
+  # leaflet,
+  # plotKML,
+  # kableExtra,
+  # httr,
   RPostgres,
   RPostgreSQL,
   DBI,
-  magick,
-  bcdata,
-  jpeg,
-  datapasta,
+  # magick,
+  # bcdata,
+  # jpeg,
+  # datapasta,
   knitr,
-  data.table,
-  lubridate,
-  forcats,
+  # data.table,
+  # lubridate,
+  # forcats,
   bookdown,
-  fasstr,
+  # fasstr,
   # flextable,
-  english,
-  leaflet.extras,
+  # english,
+  # leaflet.extras,
   ggdark,
-  pdftools,
-  geojsonsf,
-  bit64 ##to make integer column type for pg
+  # pdftools,
+  # geojsonsf,
+  # bit64 ##to make integer column type for pg
   # gert  ##to track git moves
   ##leafpop I think
   )
 
 
 
-pacman::p_load_gh("poissonconsulting/fwapgr",
-                  "crsh/citr",
-                  "rstudio/pagedown")
-                  # "poissonconsulting/subfoldr2")
+# pacman::p_load_gh("poissonconsulting/fwapgr",
+#                   "crsh/citr",
+#                   "rstudio/pagedown")
+#                   # "poissonconsulting/subfoldr2")
