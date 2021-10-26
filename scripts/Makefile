@@ -52,6 +52,7 @@ elev.csv: fiss_density_watersheds.geojson
 	    2>/dev/null" | \
 	jq '.features[].properties | [.fiss_density_watersheds_id, .elev_min, .elev_max, .elev_mean]' | \
 	jq -r --slurp '.[] | @csv' > $@
+	gsed  -i 'fiss_density_watersheds_id,elev_min,elev_max,elev_mean' elev.csv
 
 # bec zones
 bec.csv: fiss_density_watersheds.geojson

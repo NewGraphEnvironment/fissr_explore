@@ -31,12 +31,22 @@ To run the scripts and create output csv files:
 
 # Outputs
 
+## fiss_density_distinct
+
+n=28,308
+
+Temp table of unique locations (not exported). From 45,206 source records.
+
 ## fiss_density_events.csv
+
+n=54599
 
 Distinct fiss density points, each joined to all streams (up to 20) within 200m.
 Join these distinct locations back to source `fiss_density.csv` using values in `density_ids`.
 
 ## fiss_density_pts.geojson
+
+n=18,443
 
 This is fiss_density_events converted to points on the 'best' matching stream.
 'best' is difficult to determine - 'closest' is generally error prone and there is no good data included for QA of matching (eg stream name).
@@ -52,6 +62,8 @@ But this is a bit conservative - instead:
 This is crude but helps retain some more records for analysis (17308 vs 14898 where only 1 match within 100m).
 
 ## fiss_density_watersheds.geojson
+
+n=13,795
 
 Watersheds upstream of fiss_density_pts.geojson, based on `FWA_WatershedAtMeasure()`.
 - only one watershed is generated per unique watershed code in the source points (join back to `fiss_density_pts.geojson` using values in
