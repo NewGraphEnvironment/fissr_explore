@@ -87,7 +87,7 @@ records_to_retain AS
 
 -- join back to source table, add basic stream info, create geoms
 
-SELECT
+SELECT DISTINCT ON (a.fiss_density_distinct_id)
   --b.fiss_density_id,
   a.fiss_density_distinct_id,
   a.linear_feature_id,
