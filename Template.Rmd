@@ -101,7 +101,7 @@ Using the electrofishing data from British Columbia databases (supplied by [Robi
 
 <br>
 
-Through this work and numerous other initiatives [Simon Norris](https://github.com/smnorris) has been evolving [fwapg](https://github.com/smnorris/fwapg).fwapg is leveraged with [fwapgr](https://github.com/poissonconsulting/fwapgr) to provide an R Client to the database and expand the tool's functionality. To gather stream segment and [watershed characteristics](https://github.com/smnorris/fissr_explore/tree/master/scripts) related to the electrofishing density points that were shared with us by the province these tools are expanding the information in the dataset. The resulting outputs are constantly evolving with initial versions undergoing defensible magic in [fissr-explore-21](https://github.com/poissonconsulting/fissr-explore-21).
+Through this work and numerous other initiatives [Simon Norris](https://github.com/smnorris) has been evolving [fwapg](https://github.com/smnorris/fwapg). fwapg is leveraged with [fwapgr](https://github.com/poissonconsulting/fwapgr) to provide an R Client to the database and expand the tool's functionality. To gather stream segment and [watershed characteristics](https://github.com/smnorris/fissr_explore/tree/master/scripts) related to the electrofishing density points that were shared with us by the province these tools are expanding the information in the dataset. The resulting outputs are constantly evolving with initial versions undergoing defensible magic in [fissr-explore-21](https://github.com/poissonconsulting/fissr-explore-21).
 
 
 
