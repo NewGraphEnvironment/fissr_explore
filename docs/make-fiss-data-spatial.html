@@ -6,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>4 Make FISS data spatial | Linking Fish Density to Habitat Characteristics</title>
   <meta name="description" content="My Description." />
-  <meta name="generator" content="bookdown 0.22 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.23 and GitBook 2.6.7" />
 
   <meta property="og:title" content="4 Make FISS data spatial | Linking Fish Density to Habitat Characteristics" />
   <meta property="og:type" content="book" />
@@ -31,8 +31,8 @@
   
 <link rel="prev" href="explore-data-exported-from-fiss.html"/>
 
-<script src="libs/header-attrs-2.9/header-attrs.js"></script>
-<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<script src="libs/header-attrs-2.10/header-attrs.js"></script>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
@@ -188,13 +188,13 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="make-fiss-data-spatial" class="section level1" number="4">
 <h1><span class="header-section-number">4</span> Make FISS data spatial</h1>
 <p>We need in spatial format to tie to the FWA so lets put everything in albers and add the X and Y to the dataframe</p>
-<div class="sourceCode" id="cb42"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb42-1"><a href="make-fiss-data-spatial.html#cb42-1" aria-hidden="true" tabindex="-1"></a>d_sum_albers <span class="ot">&lt;-</span> d_sum <span class="sc">%&gt;%</span> </span>
-<span id="cb42-2"><a href="make-fiss-data-spatial.html#cb42-2" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">group_split</span>(utm_zone) <span class="sc">%&gt;%</span> </span>
-<span id="cb42-3"><a href="make-fiss-data-spatial.html#cb42-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">map</span>(utm_to_coord) <span class="sc">%&gt;%</span> </span>
-<span id="cb42-4"><a href="make-fiss-data-spatial.html#cb42-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">bind_rows</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb43"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb43-1"><a href="make-fiss-data-spatial.html#cb43-1" aria-hidden="true" tabindex="-1"></a>d_sum_albers <span class="ot">&lt;-</span> d_sum <span class="sc">%&gt;%</span> </span>
+<span id="cb43-2"><a href="make-fiss-data-spatial.html#cb43-2" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">group_split</span>(utm_zone) <span class="sc">%&gt;%</span> </span>
+<span id="cb43-3"><a href="make-fiss-data-spatial.html#cb43-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">map</span>(utm_to_coord) <span class="sc">%&gt;%</span> </span>
+<span id="cb43-4"><a href="make-fiss-data-spatial.html#cb43-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">bind_rows</span>()</span></code></pre></div>
 <p><br></p>
 <p>Burn to a csv so that Simon can access and join to habitat characteristics</p>
-<div class="sourceCode" id="cb43"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb43-1"><a href="make-fiss-data-spatial.html#cb43-1" aria-hidden="true" tabindex="-1"></a>d_sum_albers <span class="sc">%&gt;%</span> readr<span class="sc">::</span><span class="fu">write_csv</span>(<span class="at">file =</span> <span class="fu">paste0</span>(<span class="fu">getwd</span>(), <span class="st">&#39;/data/fiss_density.csv&#39;</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb44"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb44-1"><a href="make-fiss-data-spatial.html#cb44-1" aria-hidden="true" tabindex="-1"></a>d_sum_albers <span class="sc">%&gt;%</span> readr<span class="sc">::</span><span class="fu">write_csv</span>(<span class="at">file =</span> <span class="fu">paste0</span>(<span class="fu">getwd</span>(), <span class="st">&#39;/data/fiss_density.csv&#39;</span>))</span></code></pre></div>
 <p>Next steps?:</p>
 <ul>
 <li>While Joe and Nadine tweak the channel-width-21 analysis and have a look at what data from here they think we should keep or throw away…</li>
@@ -254,6 +254,10 @@ gitbook.start({
 "text": null
 },
 "download": ["Template.pdf", "Template.html"],
+"search": {
+"engine": "lunr",
+"options": null
+},
 "toc": {
 "collapse": "subsection"
 }
