@@ -557,3 +557,13 @@ Next steps?:
 
 <!--chapter:end:0130-fiss_spatial.Rmd-->
 
+
+
+# Session Info
+```{r session info, comment="", class.source = 'fold-show'}
+xfun::session_info()
+```
+
+
+<!--chapter:end:0140-session-info.Rmd-->
+

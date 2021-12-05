@@ -4,11 +4,11 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>4 Make FISS data spatial | Linking Fish Density to Habitat Characteristics</title>
+  <title>5 Session Info | Linking Fish Density to Habitat Characteristics</title>
   <meta name="description" content="My Description." />
   <meta name="generator" content="bookdown 0.23 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="4 Make FISS data spatial | Linking Fish Density to Habitat Characteristics" />
+  <meta property="og:title" content="5 Session Info | Linking Fish Density to Habitat Characteristics" />
   <meta property="og:type" content="book" />
   
   
@@ -16,7 +16,7 @@
   <meta name="github-repo" content="rstudio/bookdown-demo" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="4 Make FISS data spatial | Linking Fish Density to Habitat Characteristics" />
+  <meta name="twitter:title" content="5 Session Info | Linking Fish Density to Habitat Characteristics" />
   
   <meta name="twitter:description" content="My Description." />
   
@@ -29,8 +29,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="explore-data-exported-from-fiss.html"/>
-<link rel="next" href="session-info.html"/>
+<link rel="prev" href="make-fiss-data-spatial.html"/>
+
 <script src="libs/header-attrs-2.10/header-attrs.js"></script>
 <script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -188,23 +188,40 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="make-fiss-data-spatial" class="section level1" number="4">
-<h1><span class="header-section-number">4</span> Make FISS data spatial</h1>
-<p>We need in spatial format to tie to the FWA so lets put everything in albers and add the X and Y to the dataframe</p>
-<div class="sourceCode" id="cb43"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb43-1"><a href="make-fiss-data-spatial.html#cb43-1" aria-hidden="true" tabindex="-1"></a>d_sum_albers <span class="ot">&lt;-</span> d_sum <span class="sc">%&gt;%</span> </span>
-<span id="cb43-2"><a href="make-fiss-data-spatial.html#cb43-2" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">group_split</span>(utm_zone) <span class="sc">%&gt;%</span> </span>
-<span id="cb43-3"><a href="make-fiss-data-spatial.html#cb43-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">map</span>(utm_to_coord) <span class="sc">%&gt;%</span> </span>
-<span id="cb43-4"><a href="make-fiss-data-spatial.html#cb43-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">bind_rows</span>()</span></code></pre></div>
-<p><br></p>
-<p>Burn to a csv so that Simon can access and join to habitat characteristics</p>
-<div class="sourceCode" id="cb44"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb44-1"><a href="make-fiss-data-spatial.html#cb44-1" aria-hidden="true" tabindex="-1"></a>d_sum_albers <span class="sc">%&gt;%</span> readr<span class="sc">::</span><span class="fu">write_csv</span>(<span class="at">file =</span> <span class="fu">paste0</span>(<span class="fu">getwd</span>(), <span class="st">&#39;/data/fiss_density.csv&#39;</span>))</span></code></pre></div>
-<p>Next steps?:</p>
-<ul>
-<li>While Joe and Nadine tweak the channel-width-21 analysis and have a look at what data from here they think we should keep or throw away…</li>
-<li>Simon maybe burns dataframe into postgres that represents the X and Y locations of these sites and ties the locations of the sites to stream segments then pulls out everything he can about the watershed upstream (ex. elevation, watershed size, channel width, discharge, BEC zone, precip, etc ). Future considerations include perhaps forest cover, geology, channel confinement, <a href="https://www.pacificclimate.org/data/gridded-hydrologic-model-output">Variable Infiltration Capacity (VIC-GL) model stuff</a>)</li>
-<li>We should QA how well the sites tie to streams and find a way to filter out (or correct) bad matches if possible.</li>
-<li>Feed results back to Joe and Nadine to see what we can gleen from the data.</li>
-</ul>
+<div id="session-info" class="section level1" number="5">
+<h1><span class="header-section-number">5</span> Session Info</h1>
+<div class="sourceCode" id="cb45"><pre class="sourceCode r fold-show"><code class="sourceCode r"><span id="cb45-1"><a href="session-info.html#cb45-1" aria-hidden="true" tabindex="-1"></a>xfun<span class="sc">::</span><span class="fu">session_info</span>()</span></code></pre></div>
+<pre><code>R version 4.0.5 (2021-03-31)
+Platform: x86_64-w64-mingw32/x64 (64-bit)
+Running under: Windows 10 x64 (build 22000), RStudio 1.4.1106
+
+Locale:
+  LC_COLLATE=English_Canada.1252  LC_CTYPE=English_Canada.1252    LC_MONETARY=English_Canada.1252 LC_NUMERIC=C                   
+  LC_TIME=English_Canada.1252    
+
+Package version:
+  askpass_1.1           assertthat_0.2.1      backports_1.2.1       base64enc_0.1.3       BH_1.75.0.0           bit_4.0.4            
+  bit64_4.0.5           blob_1.2.1            bookdown_0.23         broom_0.7.6           bslib_0.2.4           cachem_1.0.4         
+  callr_3.7.0           cellranger_1.1.0      chk_0.5.1             class_7.3-18          classInt_0.4-3        cli_2.5.0            
+  clipr_0.7.1           colorspace_2.0-0      compiler_4.0.5        cpp11_0.3.1           crayon_1.4.1          curl_4.3             
+  data.table_1.14.0     DBI_1.1.1             dbplyr_2.1.1          digest_0.6.27         dplyr_1.0.6           dtplyr_1.1.0         
+  e1071_1.7-6           ellipsis_0.3.1        evaluate_0.14         fansi_0.4.2           farver_2.1.0          fastmap_1.1.0        
+  forcats_0.5.1         fs_1.5.0              gargle_1.1.0          generics_0.1.0        ggdark_0.2.1          ggplot2_3.3.3        
+  glue_1.4.2            googledrive_1.0.1     googlesheets4_0.3.0   graphics_4.0.5        grDevices_4.0.5       grid_4.0.5           
+  gtable_0.3.0          haven_2.3.1           highr_0.9             hms_1.0.0             htmltools_0.5.1.1     httr_1.4.2           
+  ids_1.0.1             isoband_0.2.4         janitor_2.1.0         jquerylib_0.1.4       jsonlite_1.7.2        KernSmooth_2.23-18   
+  knitr_1.33            labeling_0.4.2        lattice_0.20.41       lifecycle_1.0.0       lubridate_1.7.10      magrittr_2.0.1       
+  markdown_1.1          MASS_7.3.53.1         Matrix_1.3.2          memoise_2.0.0         methods_4.0.5         mgcv_1.8.34          
+  mime_0.11             modelr_0.1.8          munsell_0.5.0         nlme_3.1.152          openssl_1.4.4         pacman_0.5.1         
+  pillar_1.6.0          pkgconfig_2.0.3       plogr_0.2.0           prettyunits_1.1.1     processx_3.5.2        progress_1.2.2       
+  proxy_0.4-25          ps_1.6.0              purrr_0.3.4           R6_2.5.1              rappdirs_0.3.3        RColorBrewer_1.1.2   
+  Rcpp_1.0.7            readr_1.4.0           readwritesqlite_0.1.2 readxl_1.3.1          rematch_1.0.1         rematch2_2.1.2       
+  remotes_2.3.0         reprex_2.0.0          rlang_0.4.11          rmarkdown_2.10        RPostgres_1.3.2       RPostgreSQL_0.6-2    
+  RSQLite_2.2.5         rstudioapi_0.13       rvest_1.0.0           sass_0.3.1            scales_1.1.1          selectr_0.4.2        
+  sf_0.9-8              snakecase_0.11.0      splines_4.0.5         stats_4.0.5           stringi_1.7.3         stringr_1.4.0        
+  sys_3.4               tibble_3.1.0          tidyr_1.1.3           tidyselect_1.1.1      tidyverse_1.3.1       tinytex_0.33         
+  tools_4.0.5           units_0.7-1           utf8_1.2.1            utils_4.0.5           uuid_0.1.4            vctrs_0.3.7          
+  viridisLite_0.4.0     withr_2.4.2           xfun_0.25             xml2_1.3.2            yaml_2.2.1           </code></pre>
 
 </div>
             </section>
@@ -212,8 +229,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           </div>
         </div>
       </div>
-<a href="explore-data-exported-from-fiss.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="session-info.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="make-fiss-data-spatial.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
