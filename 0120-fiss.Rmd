@@ -7,7 +7,7 @@ Purpose of this section is to explore the species density data provided in csv f
 Load the data from the dropbox
 
 
-```{r}
+```{r echo=FALSE}
 files_to_read <- list.files(paste0(shared_dropbox_dir,"fiss/2020-11-16/"), full.names = T)
 files_names <- list.files(paste0(shared_dropbox_dir,"fiss/2020-11-16/"), full.names = F) %>% tools::file_path_sans_ext()
 

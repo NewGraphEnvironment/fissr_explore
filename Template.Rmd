@@ -31,7 +31,7 @@ description: "My Description."
 ---
 
 
-```{r setup, include = TRUE, echo =FALSE, message=FALSE, warning=FALSE}
+```{r setup, include = T, echo =T, message=FALSE, warning=FALSE}
 gitbook_on <- TRUE
 # gitbook_on <- FALSE  ##we just need turn  this on and off to switch between gitbook and pdf via paged.js
 
@@ -283,8 +283,13 @@ Purpose of this section is to explore the species density data provided in csv f
 
 Load the data from the dropbox
 
+```{r setup-120, eval = F}
+knitr::opts_chunk$set(echo=F, message=FALSE, warning=FALSE)
 
-```{r}
+```
+
+
+```{r echo=FALSE}
 files_to_read <- list.files(paste0(shared_dropbox_dir,"fiss/2020-11-16/"), full.names = T)
 files_names <- list.files(paste0(shared_dropbox_dir,"fiss/2020-11-16/"), full.names = F) %>% tools::file_path_sans_ext()
 
