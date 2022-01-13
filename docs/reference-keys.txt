@@ -2,3 +2,4 @@ big-picture
 explore-fwa-streams
 explore-data-exported-from-fiss
 make-fiss-data-spatial
+session-info

@@ -7,7 +7,7 @@ Purpose of this section is to explore the species density data provided in csv f
 Load the data from the dropbox
 
 
-```{r}
+```{r echo=FALSE}
 files_to_read <- list.files(paste0(shared_dropbox_dir,"fiss/2020-11-16/"), full.names = T)
 files_names <- list.files(paste0(shared_dropbox_dir,"fiss/2020-11-16/"), full.names = F) %>% tools::file_path_sans_ext()
 
@@ -30,6 +30,12 @@ d <- files_to_read %>%
 Make a table that has all the info we want in one place for the summarized fish
 
 ```{r}
+
+##define species to analyze
+
+spp_to_analyze <- c('RB', 'BT', 'GR', 'CH', 'CO', 'SK', 'WCT', 'ST', 'NFC', 'CH', 'KO', 'PK')
+
+
 d_sum_raw <- left_join(
   d %>% pluck('counts'),
   d %>% pluck('visits'),
@@ -50,7 +56,7 @@ d_sum_raw <- left_join(
            utm_zone > 0 &
            #For the sake of a first run lets keep only the first passes from sites that have multiple passes
            haul_or_pass == 1 &
-           species_code %in% c('RB', 'BT', 'GR', 'CH', 'CO', 'SK', 'WCT', 'ST', 'NFC')) %>%
+           species_code %in% spp_to_analyze) %>%
   mutate(density_100m = number_caught/(fishing_area_length * fishing_area_width) * 100)
   
 ```
@@ -135,8 +141,9 @@ d_sum <- left_join(
            utm_zone > 0 &
            #For the sake of a first run lets keep only the first passes from sites that have multiple passes
            haul_or_pass == 1 &
-           species_code %in% c('RB', 'BT', 'GR', 'CH', 'CO', 'SK', 'WCT', 'ST', 'NFC')) %>%
-  mutate(density_100m = number_caught/(fishing_area_length * fishing_area_width) * 100)
+           species_code %in% spp_to_analyze) %>%
+  mutate(density_100m = number_caught/(fishing_area_length * fishing_area_width) * 100) %>% 
+  tibble::rowid_to_column(var = 'fiss_density_id')
 
 
 ##have another look at it

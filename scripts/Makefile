@@ -7,6 +7,7 @@ PSQL_CMD=psql $(DATABASE_URL) -v ON_ERROR_STOP=1
 # Make all targets
 all: $(GENERATED_FILES)
 
+
 fiss_density.csv: $(INPUT_FILE)
 	$(PSQL_CMD) -c "DROP TABLE IF EXISTS temp.fiss_density"
 	csvsql --db $(DATABASE_URL) --table fiss_density --insert $< --db-schema temp
@@ -23,6 +24,7 @@ fiss_density_events.csv: fiss_density_distinct.csv
 
 fiss_density_pts.geojson: fiss_density_events.csv
 	$(PSQL_CMD) -f sql/03_fiss_density_pts.sql
+
 	ogr2ogr -f GeoJSON $@ -a_srs EPSG:3005 \
 	"PG:$(DATABASE_URL?application_name=foo)" \
 	-sql "SELECT * FROM temp.fiss_density_pts"
@@ -68,6 +70,10 @@ elev.csv: fiss_density_watersheds.geojson
 # bec zones
 bec.csv: fiss_density_watersheds.geojson
 	$(PSQL_CMD) -f sql/04_fiss_density_watersheds_bec.sql
+	gsed  -i 'fiss_density_watersheds_id,elev_min,elev_max,elev_mean' elev.csv
+
+# bec zones
+bec.csv: fiss_density_watersheds.geojson
 	psql2csv "SELECT * FROM temp.fiss_density_watersheds_bec" > $@
 
 clean:

@@ -6,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>Linking Fish Density to Habitat Characteristics</title>
   <meta name="description" content="My Description." />
-  <meta name="generator" content="bookdown 0.22 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.23 and GitBook 2.6.7" />
 
   <meta property="og:title" content="Linking Fish Density to Habitat Characteristics" />
   <meta property="og:type" content="book" />
@@ -31,8 +31,8 @@
   
 
 <link rel="next" href="big-picture.html"/>
-<script src="libs/header-attrs-2.9/header-attrs.js"></script>
-<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<script src="libs/header-attrs-2.10/header-attrs.js"></script>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
@@ -69,11 +69,13 @@ function toggle_R() {
   }
 
     var elem = document.getElementById("myButton1");
-    if (elem.value === "Hide Scripts") elem.value = "Show Scripts";
-    else elem.value = "Hide Scripts";
+    if (elem.value === "Show/Hide Code") elem.value = "Show/Hide Code";
+    else elem.value = "Show/Hide Code";
 }
 
-document.write('<input onclick="toggle_R();" type="button" value="Hide Scripts" id="myButton1" style="position: absolute; top: 10%; right: 2%; z-index: 200"></input>')
+document.write('<input onclick="toggle_R();" type="button" value="Show/Hide Code" id="myButton1" style="position: absolute; top: 10%; right: 2%; z-index: 200"></input>')
+
+document.addEventListener('DOMContentLoaded', toggle_R);
 
 </script>
 
@@ -165,6 +167,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="2" data-path="explore-fwa-streams.html"><a href="explore-fwa-streams.html"><i class="fa fa-check"></i><b>2</b> Explore FWA Streams</a></li>
 <li class="chapter" data-level="3" data-path="explore-data-exported-from-fiss.html"><a href="explore-data-exported-from-fiss.html"><i class="fa fa-check"></i><b>3</b> Explore Data Exported from FISS</a></li>
 <li class="chapter" data-level="4" data-path="make-fiss-data-spatial.html"><a href="make-fiss-data-spatial.html"><i class="fa fa-check"></i><b>4</b> Make FISS data spatial</a></li>
+<li class="chapter" data-level="5" data-path="session-info.html"><a href="session-info.html"><i class="fa fa-check"></i><b>5</b> Session Info</a></li>
 <li class="divider"></li>
 <li><a href="https://github.com/NewGraphEnvironment/fissr_explore" target="blank">Scripts and Data</a></li>
 
@@ -192,16 +195,16 @@ Prepared for</div>
 <div class="line-block"><br />
 <br />
 Prepared by</div></em></p>
-<p class="date" style="margin-top: 1.5em;"><em><div class="line-block"><br />
+<p class="date"><em><div class="line-block"><br />
 Version 0.0.1<br />
-2021-08-05</div></em></p>
+2022-01-13</div></em></p>
 </div>
 <div id="acknowledgement" class="section level1 front-matter unnumbered">
 <h1>Acknowledgement</h1>
-<p>Modern civilization has a long journey ahead to acknowledge and address the historic and ongoing impacts of colonialism that have resulted in harm to ecosystems on Turtle Island. That harm naturally extends to the cultures and livelihoods of those that have lived in harmony with the land for many thousands of years.</p>
+<p>Modern civilization has a long journey ahead to acknowledge and address the historic and ongoing impacts of colonialism that have resulted in harm to the cutures and livelihoods of those that have lived in harmony with the land on Turtle Island for many thousands of years. That harm extends naturally to the ecosystems themselves.</p>
 <script type="text/javascript">
 title=document.getElementById('header');
-title.innerHTML = '<img src="fig/logo.png" alt="NewGraph">' + title.innerHTML
+title.innerHTML = '<img src="fig/collaboration.jpg" alt="NewGraph">' + title.innerHTML
 </script>
 
 </div>
@@ -255,6 +258,10 @@ gitbook.start({
 "text": null
 },
 "download": ["Template.pdf", "Template.html"],
+"search": {
+"engine": "lunr",
+"options": null
+},
 "toc": {
 "collapse": "subsection"
 }

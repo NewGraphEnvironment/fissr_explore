@@ -33,10 +33,9 @@ streams <- sf::st_read(conn, query = q)
 
 
 ##  the streams in a sqlite and pull them back in.
-
 ##########################!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!#########################
 ###change this up so that it matches your version of the ahred dropbox!
-shared_dropbox_dir <- "C:/Users/al/Dropbox/New Graph/"
+
 
 
 
@@ -48,6 +47,16 @@ readwritesqlite::rws_write(streams, exists = F, delete = TRUE,
           conn = conn, x_name = "whse_basemapping.fwa_stream_networks_sp")
 readwritesqlite::rws_list_tables(conn)
 readwritesqlite::rws_disconnect(conn)
+
+
+
+```
+
+```{r}
+
+
+
+shared_dropbox_dir <- "C:/Users/al/Dropbox/New Graph/"
 ```
 
 
@@ -55,7 +64,7 @@ Load the streams from sqlite.  The table I pull back in after saving as `sqlite`
 
 ```{r}
 conn <- readwritesqlite::rws_connect(paste0(shared_dropbox_dir, "fiss/fissr_explore.sqlite"))
-streams2 <- readwritesqlite::rws_read_table("whse_basemapping.fwa_stream_networks_sp", conn = conn)
+streams <- readwritesqlite::rws_read_table("whse_basemapping.fwa_stream_networks_sp", conn = conn)
 readwritesqlite::rws_disconnect(conn)
 ```
 

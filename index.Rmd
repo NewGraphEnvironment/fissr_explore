@@ -31,7 +31,7 @@ description: "My Description."
 ---
 
 
-```{r setup, include = TRUE, echo =FALSE, message=FALSE, warning=FALSE}
+```{r setup, include = T, echo =T, message=FALSE, warning=FALSE}
 gitbook_on <- TRUE
 # gitbook_on <- FALSE  ##we just need turn  this on and off to switch between gitbook and pdf via paged.js
 
@@ -74,12 +74,12 @@ knitr::write_bib(c(
 # Acknowledgement {.front-matter .unnumbered}
 
 
-Modern civilization has a long journey ahead to acknowledge and address the historic and ongoing impacts of colonialism that have resulted in harm to  ecosystems on Turtle Island.  That harm naturally extends to the cultures and livelihoods of those that have lived in harmony with the land for many thousands of years.
+Modern civilization has a long journey ahead to acknowledge and address the historic and ongoing impacts of colonialism that have resulted in harm to the cutures and livelihoods of those that have lived in harmony with the land on Turtle Island for many thousands of years. That harm extends naturally to the ecosystems themselves. 
 
 
 
 ```{js, logo-header, echo = FALSE, eval= T}
 title=document.getElementById('header');
-title.innerHTML = '<img src="fig/logo.png" alt="NewGraph">' + title.innerHTML
+title.innerHTML = '<img src="fig/collaboration.jpg" alt="NewGraph">' + title.innerHTML
 ```
 

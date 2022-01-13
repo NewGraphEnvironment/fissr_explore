@@ -16,10 +16,12 @@ function toggle_R() {
   }
 
     var elem = document.getElementById("myButton1");
-    if (elem.value === "Hide Scripts") elem.value = "Show Scripts";
-    else elem.value = "Hide Scripts";
+    if (elem.value === "Show/Hide Code") elem.value = "Show/Hide Code";
+    else elem.value = "Show/Hide Code";
 }
 
-document.write('<input onclick="toggle_R();" type="button" value="Hide Scripts" id="myButton1" style="position: absolute; top: 10%; right: 2%; z-index: 200"></input>')
+document.write('<input onclick="toggle_R();" type="button" value="Show/Hide Code" id="myButton1" style="position: absolute; top: 10%; right: 2%; z-index: 200"></input>')
+
+document.addEventListener('DOMContentLoaded', toggle_R);
 
 </script>
