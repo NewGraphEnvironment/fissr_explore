@@ -1,28 +1,39 @@
 .PHONY: all clean
 
-GENERATED_FILES = fiss_density_events.csv fiss_density_pts.geojson fiss_density_watersheds.geojson elev.csv bec.csv
+INPUT_FILE=../data/fiss_density.csv
+GENERATED_FILES = fiss_density.csv fiss_density_distinct.csv fiss_density_events.csv fiss_density_pts.geojson fiss_density_watersheds.geojson #elev.csv bec.csv
+PSQL_CMD=psql $(DATABASE_URL) -v ON_ERROR_STOP=1
 
 # Make all targets
 all: $(GENERATED_FILES)
 
-fiss_density_events.csv: ../data/fiss_density.csv
-	psql -c "DROP TABLE IF EXISTS temp.fiss_density"
+fiss_density.csv: $(INPUT_FILE)
+	$(PSQL_CMD) -c "DROP TABLE IF EXISTS temp.fiss_density"
 	csvsql --db $(DATABASE_URL) --table fiss_density --insert $< --db-schema temp
-	psql -v ON_ERROR_STOP=1 -f sql/01_fiss_density_events.sql
+	$(PSQL_CMD) -c "ALTER TABLE temp.fiss_density ADD COLUMN IF NOT EXISTS fiss_density_id SERIAL PRIMARY KEY;"
+	psql2csv "SELECT * FROM temp.fiss_density" > $@
+
+fiss_density_distinct.csv: fiss_density.csv
+	$(PSQL_CMD) -f sql/01_fiss_density_distinct.sql
+	psql2csv "SELECT * FROM temp.fiss_density_distinct" > $@
+
+fiss_density_events.csv: fiss_density_distinct.csv
+	$(PSQL_CMD) -f sql/02_fiss_density_events.sql
 	psql2csv "SELECT * FROM temp.fiss_density_events" > $@
 
 fiss_density_pts.geojson: fiss_density_events.csv
-	psql -v ON_ERROR_STOP=1 -f sql/02_fiss_density_pts.sql
+	$(PSQL_CMD) -f sql/03_fiss_density_pts.sql
 	ogr2ogr -f GeoJSON $@ -a_srs EPSG:3005 \
 	"PG:$(DATABASE_URL?application_name=foo)" \
 	-sql "SELECT * FROM temp.fiss_density_pts"
 
 fiss_density_watersheds.geojson: fiss_density_pts.geojson
-	psql -v ON_ERROR_STOP=1 -f sql/03_fiss_density_watersheds.sql
+	$(PSQL_CMD) -f sql/04_fiss_density_watersheds.sql
 	ogr2ogr -f GeoJSON $@ -a_srs EPSG:3005 \
 	"PG:$(DATABASE_URL?application_name=foo)" \
 	-sql "SELECT \
         fiss_density_watersheds_id, \
+        fiss_density_distinct_ids, \
         ST_Multi(ST_SimplifyPreserveTopology(geom, 20))::geometry(MultiPolygon, 3005) as geom \
       FROM \
       temp.fiss_density_watersheds"
@@ -52,11 +63,11 @@ elev.csv: fiss_density_watersheds.geojson
 	    2>/dev/null" | \
 	jq '.features[].properties | [.fiss_density_watersheds_id, .elev_min, .elev_max, .elev_mean]' | \
 	jq -r --slurp '.[] | @csv' > $@
-	gsed  -i 'fiss_density_watersheds_id,elev_min,elev_max,elev_mean' elev.csv
+	#gsed  -i 'fiss_density_watersheds_id,elev_min,elev_max,elev_mean' $@
 
 # bec zones
 bec.csv: fiss_density_watersheds.geojson
-	psql -v ON_ERROR_STOP=1 -f sql/04_fiss_density_watersheds_bec.sql
+	$(PSQL_CMD) -f sql/04_fiss_density_watersheds_bec.sql
 	psql2csv "SELECT * FROM temp.fiss_density_watersheds_bec" > $@
 
 clean:

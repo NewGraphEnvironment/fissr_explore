@@ -76,7 +76,7 @@ records_to_retain AS
     a.stream_order,
     a.distance_to_stream,
     a.watershed_group_code,
-    b.density_ids
+    b.fiss_density_ids
   FROM closest_within_50_and_100 a
   INNER JOIN temp.fiss_density_distinct b
   ON a.fiss_density_distinct_id = b.fiss_density_distinct_id
@@ -88,8 +88,8 @@ records_to_retain AS
 -- join back to source table, add basic stream info, create geoms
 
 SELECT DISTINCT ON (a.fiss_density_distinct_id)
-  --b.fiss_density_id,
   a.fiss_density_distinct_id,
+  a.fiss_density_ids,
   a.linear_feature_id,
   a.blue_line_key,
   a.downstream_route_measure,
@@ -104,8 +104,6 @@ SELECT DISTINCT ON (a.fiss_density_distinct_id)
   s.localcode_ltree,
   FWA_LocateAlong(a.blue_line_key, a.downstream_route_measure)::geometry(PointZM, 3005) as geom
 FROM records_to_retain a
---INNER JOIN temp.fiss_density b
---ON b.fiss_density_id = ANY (a.density_ids)
 LEFT OUTER JOIN bcfishpass.discharge_pcic d
 ON a.linear_feature_id = d.linear_feature_id
 INNER JOIN whse_basemapping.fwa_stream_networks_sp s
