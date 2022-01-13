@@ -32,8 +32,8 @@ description: "My Description."
 
 
 ```{r setup, include = T, echo =T, message=FALSE, warning=FALSE}
-gitbook_on <- TRUE
-# gitbook_on <- FALSE  ##we just need turn  this on and off to switch between gitbook and pdf via paged.js
+# gitbook_on <- TRUE
+gitbook_on <- FALSE  ##we just need turn  this on and off to switch between gitbook and pdf via paged.js
 
 
 knitr::opts_chunk$set(echo=T, message=FALSE, warning=FALSE, dpi=60, out.width = "100%")
@@ -282,11 +282,6 @@ Purpose of this section is to explore the species density data provided in csv f
 
 
 Load the data from the dropbox
-
-```{r setup-120, eval = F}
-knitr::opts_chunk$set(echo=F, message=FALSE, warning=FALSE)
-
-```
 
 
 ```{r echo=FALSE}
