@@ -191,13 +191,13 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="make-fiss-data-spatial" class="section level1" number="4">
 <h1><span class="header-section-number">4</span> Make FISS data spatial</h1>
 <p>We need in spatial format to tie to the FWA so lets put everything in albers and add the X and Y to the dataframe</p>
-<div class="sourceCode" id="cb44"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb44-1"><a href="make-fiss-data-spatial.html#cb44-1" aria-hidden="true" tabindex="-1"></a>d_sum_albers <span class="ot">&lt;-</span> d_sum <span class="sc">%&gt;%</span> </span>
-<span id="cb44-2"><a href="make-fiss-data-spatial.html#cb44-2" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">group_split</span>(utm_zone) <span class="sc">%&gt;%</span> </span>
-<span id="cb44-3"><a href="make-fiss-data-spatial.html#cb44-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">map</span>(utm_to_coord) <span class="sc">%&gt;%</span> </span>
-<span id="cb44-4"><a href="make-fiss-data-spatial.html#cb44-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">bind_rows</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb43"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb43-1"><a href="make-fiss-data-spatial.html#cb43-1" aria-hidden="true" tabindex="-1"></a>d_sum_albers <span class="ot">&lt;-</span> d_sum <span class="sc">%&gt;%</span> </span>
+<span id="cb43-2"><a href="make-fiss-data-spatial.html#cb43-2" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">group_split</span>(utm_zone) <span class="sc">%&gt;%</span> </span>
+<span id="cb43-3"><a href="make-fiss-data-spatial.html#cb43-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">map</span>(utm_to_coord) <span class="sc">%&gt;%</span> </span>
+<span id="cb43-4"><a href="make-fiss-data-spatial.html#cb43-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">bind_rows</span>()</span></code></pre></div>
 <p><br></p>
 <p>Burn to a csv so that Simon can access and join to habitat characteristics</p>
-<div class="sourceCode" id="cb45"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb45-1"><a href="make-fiss-data-spatial.html#cb45-1" aria-hidden="true" tabindex="-1"></a>d_sum_albers <span class="sc">%&gt;%</span> readr<span class="sc">::</span><span class="fu">write_csv</span>(<span class="at">file =</span> <span class="fu">paste0</span>(<span class="fu">getwd</span>(), <span class="st">&#39;/data/fiss_density.csv&#39;</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb44"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb44-1"><a href="make-fiss-data-spatial.html#cb44-1" aria-hidden="true" tabindex="-1"></a>d_sum_albers <span class="sc">%&gt;%</span> readr<span class="sc">::</span><span class="fu">write_csv</span>(<span class="at">file =</span> <span class="fu">paste0</span>(<span class="fu">getwd</span>(), <span class="st">&#39;/data/fiss_density.csv&#39;</span>))</span></code></pre></div>
 <p>Next steps?:</p>
 <ul>
 <li>While Joe and Nadine tweak the channel-width-21 analysis and have a look at what data from here they think we should keep or throw away…</li>

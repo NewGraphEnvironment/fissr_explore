@@ -32,8 +32,8 @@ description: "My Description."
 
 
 ```{r setup, include = T, echo =T, message=FALSE, warning=FALSE}
-# gitbook_on <- TRUE
-gitbook_on <- FALSE  ##we just need turn  this on and off to switch between gitbook and pdf via paged.js
+gitbook_on <- TRUE
+# gitbook_on <- FALSE  ##we just need turn  this on and off to switch between gitbook and pdf via paged.js
 
 
 knitr::opts_chunk$set(echo=T, message=FALSE, warning=FALSE, dpi=60, out.width = "100%")
@@ -74,7 +74,7 @@ knitr::write_bib(c(
 # Acknowledgement {.front-matter .unnumbered}
 
 
-Modern civilization has a long journey ahead to acknowledge and address the historic and ongoing impacts of colonialism that have resulted in harm to  ecosystems on Turtle Island.  That harm naturally extends to the cultures and livelihoods of those that have lived in harmony with the land for many thousands of years.
+Modern civilization has a long journey ahead to acknowledge and address the historic and ongoing impacts of colonialism that have resulted in harm to the cutures and livelihoods of those that have lived in harmony with the land on Turtle Island for many thousands of years. That harm extends naturally to the ecosystems themselves. 
 
 
 
@@ -102,6 +102,10 @@ Using the electrofishing data from British Columbia databases (supplied by [Robi
 <br>
 
 Through this work and numerous other initiatives [Simon Norris](https://github.com/smnorris) has been evolving [fwapg](https://github.com/smnorris/fwapg). fwapg is leveraged with [fwapgr](https://github.com/poissonconsulting/fwapgr) to provide an R Client to the database and expand the tool's functionality. To gather stream segment and [watershed characteristics](https://github.com/smnorris/fissr_explore/tree/master/scripts) related to the electrofishing density points that were shared with us by the province these tools are expanding the information in the dataset. The resulting outputs are constantly evolving with initial versions undergoing defensible magic in [fissr-explore-21](https://github.com/poissonconsulting/fissr-explore-21).
+
+<br>
+
+Recently we have come across this [EAUBC Rivers](https://catalogue.data.gov.bc.ca/dataset/eaubc-rivers) dataset.  EAU BC is a hierarchical classification of BC's freshwater ecosystems. EAUBC Rivers (`WHSE_LAND_AND_NATURAL_RESOURCE.EAUBC_RIVERS_SP`) is a spatial layer representing River and Lake Ecosystem Types nested within both Ecological Drainage Units and Freshwater Ecoregions. Seems like a great resource and the source code to create it must be an absolute jackpot.
 
 
 
@@ -307,6 +311,12 @@ d <- files_to_read %>%
 Make a table that has all the info we want in one place for the summarized fish
 
 ```{r}
+
+##define species to analyze
+
+spp_to_analyze <- c('RB', 'BT', 'GR', 'CH', 'CO', 'SK', 'WCT', 'ST', 'NFC', 'CH', 'KO', 'PK')
+
+
 d_sum_raw <- left_join(
   d %>% pluck('counts'),
   d %>% pluck('visits'),
@@ -327,7 +337,7 @@ d_sum_raw <- left_join(
            utm_zone > 0 &
            #For the sake of a first run lets keep only the first passes from sites that have multiple passes
            haul_or_pass == 1 &
-           species_code %in% c('RB', 'BT', 'GR', 'CH', 'CO', 'SK', 'WCT', 'ST', 'NFC')) %>%
+           species_code %in% spp_to_analyze) %>%
   mutate(density_100m = number_caught/(fishing_area_length * fishing_area_width) * 100)
   
 ```
@@ -412,8 +422,9 @@ d_sum <- left_join(
            utm_zone > 0 &
            #For the sake of a first run lets keep only the first passes from sites that have multiple passes
            haul_or_pass == 1 &
-           species_code %in% c('RB', 'BT', 'GR', 'CH', 'CO', 'SK', 'WCT', 'ST', 'NFC')) %>%
-  mutate(density_100m = number_caught/(fishing_area_length * fishing_area_width) * 100)
+           species_code %in% spp_to_analyze) %>%
+  mutate(density_100m = number_caught/(fishing_area_length * fishing_area_width) * 100) %>% 
+  tibble::rowid_to_column(var = 'fiss_density_id')
 
 
 ##have another look at it
