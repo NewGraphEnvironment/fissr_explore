@@ -15,4 +15,8 @@ Using the electrofishing data from British Columbia databases (supplied by [Robi
 
 Through this work and numerous other initiatives [Simon Norris](https://github.com/smnorris) has been evolving [fwapg](https://github.com/smnorris/fwapg). fwapg is leveraged with [fwapgr](https://github.com/poissonconsulting/fwapgr) to provide an R Client to the database and expand the tool's functionality. To gather stream segment and [watershed characteristics](https://github.com/smnorris/fissr_explore/tree/master/scripts) related to the electrofishing density points that were shared with us by the province these tools are expanding the information in the dataset. The resulting outputs are constantly evolving with initial versions undergoing defensible magic in [fissr-explore-21](https://github.com/poissonconsulting/fissr-explore-21).
 
+<br>
+
+Recently we have come across this [EAUBC Rivers](https://catalogue.data.gov.bc.ca/dataset/eaubc-rivers) dataset.  EAU BC is a hierarchical classification of BC's freshwater ecosystems. EAUBC Rivers (`WHSE_LAND_AND_NATURAL_RESOURCE.EAUBC_RIVERS_SP`) is a spatial layer representing River and Lake Ecosystem Types nested within both Ecological Drainage Units and Freshwater Ecoregions. Seems like a great resource and the source code to create it must be an absolute jackpot.
+
 
