@@ -75,6 +75,19 @@ This is crude but helps retain some more records for analysis (17308 vs 14898 wh
 
 List of barrier features downstream of distinct density points.
 
+| column   | description |
+| ---------| ------------|
+| barriers_majordams_dnstr | ID(s) of major (hydro) dam downstream                     |
+| barriers_falls_dnstr     | ID(s) of FISS falls >= 5m or FWA falls downstream         |
+| barriers_subsurface_dnstr | ID(s) of FWA subsurface flow segments downstream |
+| barriers_gradient_dnstr   | ID(s) of gradient barriers of given percent slope downstream (5/7/10/15/20/25/30) |
+| barriers_anthropogenic_dnstr | aggregated_crossings_id(s) of all known/modelled anthropogenic barriers or potential barriers downstream |
+| barriers_pscis_dnstr       | stream_crossing_id(s) of all assessed barriers downstream |
+| all_pscis_dnstr        | stream_crossing_id(s) of all pscis records downstream
+| all_pscis_scores_dnstr | pscis barrier scores of all pscis assessments downstream (NULL for open bottom strucures)
+
+NOTE: only barriers within the same watershed group as the source point are reported on, with the exception of `majordams_dnstr`
+
 ## fiss_density_watersheds.geojson
 
 n=13,795
