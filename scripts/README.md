@@ -1,33 +1,47 @@
-# fiss_density
+# scripts
 
-Tie locations of FISS density sites to stream segments then report on:
+sql/shell scripts to:
 
-- modelled channel width
-- modelled discharge
-- precip in watershed
-- elevation in watershed
-- BEC zones in watershed
+1. Reference input FISS density sites to FWA streams
 
-Future considerations include perhaps:
+2. At the site locations, report on:
+
+    - stream order
+    - gradient
+    - modelled channel width
+    - modelled discharge
+    - precip in watershed
+    - barriers/potential barriers downstream
+    - elevation in watershed
+    - BEC zones in watershed
+
+
+Future considerations:
+
 - forest cover
 - geology
 - channel confinement
 - Variable Infiltration Capacity (VIC-GL) model inputs
+- other
+
 
 # Requirements
 
-- fwapg (postgres/gdal/etc)
-- csvkit
+- fwapg
+- bcfishpass
+- csvsql
 - psql2csv
 - rasterstats
 - jq
 - BC DEM tif on local drive
 
+
 # Usage
 
-To run the scripts and create output csv files:
+Presuming all requirements are available, run the scripts and create output csv files with `make`:
 
-    make
+    $ make
+
 
 # Outputs
 
@@ -35,20 +49,15 @@ To run the scripts and create output csv files:
 
 n=28,308
 
-Temp table of unique locations (not exported). From 45,206 source records.
+Aggregation of the 45,206 input points into unique locations.
+Use this to relates source `fiss_density_id` values to `fiss_denstity_distinct_id` values in below tables.
 
-## fiss_density_events.csv
 
-n=54599
-
-Distinct fiss density points, each joined to all streams (up to 20) within 200m.
-Join these distinct locations back to source `fiss_density.csv` using values in `density_ids`.
-
-## fiss_density_pts.geojson
+## fiss_density_pts.csv
 
 n=18,443
 
-This is fiss_density_events converted to points on the 'best' matching stream.
+Matching of input points to the 'best' matching FWA stream.
 'best' is difficult to determine - 'closest' is generally error prone and there is no good data included for QA of matching (eg stream name).
 We could retain only records where we are more confident about the matching - just one stream within 100m or so of the point.
 But this is a bit conservative - instead:
@@ -60,6 +69,11 @@ But this is a bit conservative - instead:
     + are within 10m of first stream matched and 2nd stream matched is more than 60m away
     + the 2nd stream matched is more than 80m away (ie match 1 within 10-20m and match 2 90-100m away)
 This is crude but helps retain some more records for analysis (17308 vs 14898 where only 1 match within 100m).
+
+
+## barriers.csv
+
+List of barrier features downstream of distinct density points.
 
 ## fiss_density_watersheds.geojson
 

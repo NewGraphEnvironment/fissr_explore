@@ -36,7 +36,7 @@ SELECT
   b.watershed_group_code,
   a.geom
 FROM aggregated a
-INNER JOIN whse_basemapping.fwa_watershed_groups_subdivided b
+INNER JOIN whse_basemapping.fwa_watershed_groups_poly b
 ON ST_Intersects(a.geom, b.geom);
 
 -- index the geoms

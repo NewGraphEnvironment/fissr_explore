@@ -92,6 +92,8 @@ SELECT DISTINCT ON (a.fiss_density_distinct_id)
   a.fiss_density_ids,
   a.linear_feature_id,
   a.blue_line_key,
+  s.wscode_ltree,
+  s.localcode_ltree,
   a.downstream_route_measure,
   a.watershed_group_code,
   a.distance_to_stream,
@@ -100,9 +102,7 @@ SELECT DISTINCT ON (a.fiss_density_distinct_id)
   p.map,
   p.map_upstream,
   d.mad_m3s,
-  s.wscode_ltree,
-  s.localcode_ltree,
-  FWA_LocateAlong(a.blue_line_key, a.downstream_route_measure)::geometry(PointZM, 3005) as geom
+  postgisftw.FWA_LocateAlong(a.blue_line_key, a.downstream_route_measure)::geometry(PointZM, 3005) as geom
 FROM records_to_retain a
 LEFT OUTER JOIN bcfishpass.discharge_pcic d
 ON a.linear_feature_id = d.linear_feature_id
