@@ -86,8 +86,10 @@ List of barrier features downstream of distinct density points.
 | all_pscis_dnstr        | stream_crossing_id(s) of all pscis records downstream
 | all_pscis_scores_dnstr | pscis barrier scores of all pscis assessments downstream (NULL for open bottom strucures)
 
-NOTE 1: only barriers within the same watershed group as the source point are reported on, with the exception of `majordams_dnstr`
-NOTE 2: only features within BC are included. For the Columbia system, major dams in WA/OR are not considered
+Caveats:
+- only barriers within the same watershed group as the source point are reported on, with the exception of `majordams_dnstr`
+- only features within BC are included (for the Columbia system, major dams in WA/OR are not considered)
+- falls data has not been comprehensively QA'ed, many included falls will not be barriers to fish passage
 
 ## fiss_density_watersheds.geojson
 
