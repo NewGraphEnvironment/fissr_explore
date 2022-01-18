@@ -38,7 +38,8 @@ all: $(GENERATED_FILES)
 			  mad_m3s, \
 			  st_x(geom) as bcalbers_x, \
 			  st_y(geom) as bcalbers_y \
-			from temp.fiss_density_pts" > $@
+			from temp.fiss_density_pts \
+			order by fiss_density_distinct_id" > $@
 
 
 
