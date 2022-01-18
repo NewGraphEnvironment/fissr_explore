@@ -1,28 +1,57 @@
 .PHONY: all clean
 
-GENERATED_FILES = fiss_density_events.csv fiss_density_pts.geojson fiss_density_watersheds.geojson elev.csv bec.csv
+DATABASE_URL=postgresql://postgres:postgres@localhost:8003/bcfishpass
+
+INPUT_FILE=../data/fiss_density.csv
+GENERATED_FILES = .fiss_density ../data/fiss_density_distinct.csv ../data/fiss_density_events.csv ../data/fiss_density_pts.geojson ../data/fiss_density_watersheds.geojson ../data/elev.csv ../data/bec.csv
+PSQL_CMD=psql $(DATABASE_URL) -v ON_ERROR_STOP=1
 
 # Make all targets
 all: $(GENERATED_FILES)
 
-fiss_density_events.csv: ../data/fiss_density.csv
-	psql -c "DROP TABLE IF EXISTS temp.fiss_density"
+.fiss_density: $(INPUT_FILE)
+	$(PSQL_CMD) -c "CREATE SCHEMA IF NOT EXISTS temp"
+	$(PSQL_CMD) -c "DROP TABLE IF EXISTS temp.fiss_density"
 	csvsql --db $(DATABASE_URL) --table fiss_density --insert $< --db-schema temp
-	psql -v ON_ERROR_STOP=1 -f sql/01_fiss_density_events.sql
-	psql2csv "SELECT * FROM temp.fiss_density_events" > $@
+	touch $@
 
-fiss_density_pts.geojson: fiss_density_events.csv
-	psql -v ON_ERROR_STOP=1 -f sql/02_fiss_density_pts.sql
-	ogr2ogr -f GeoJSON $@ -a_srs EPSG:3005 \
-	"PG:$(DATABASE_URL?application_name=foo)" \
-	-sql "SELECT * FROM temp.fiss_density_pts"
+../data/fiss_density_distinct.csv: .fiss_density sql/01_fiss_density_distinct.sql
+	$(PSQL_CMD) -f sql/01_fiss_density_distinct.sql
+	psql2csv $(DATABASE_URL) "SELECT fiss_density_distinct_id, fiss_density_ids FROM temp.fiss_density_distinct" > $@
 
-fiss_density_watersheds.geojson: fiss_density_pts.geojson
-	psql -v ON_ERROR_STOP=1 -f sql/03_fiss_density_watersheds.sql
+../data/fiss_density_pts.csv: ../data/fiss_density_distinct.csv sql/02_fiss_density_events.sql sql/03_fiss_density_pts.sql
+	#$(PSQL_CMD) -f sql/02_fiss_density_events.sql # join source locations to all streams within 200m (don't bother dumping)
+	#$(PSQL_CMD) -f sql/03_fiss_density_pts.sql    # join source locations to best guess matching stream, add additional info
+	psql2csv $(DATABASE_URL) "SELECT \
+			  fiss_density_distinct_id, \
+			  fiss_density_ids, \
+			  distance_to_stream, \
+			  stream_order, \
+			  stream_order_parent, \
+			  stream_magnitude, \
+			  gradient, \
+			  map, \
+			  map_upstream, \
+			  upstream_area_ha, \
+			  channel_width, \
+			  channel_width_source, \
+			  mad_m3s, \
+			  st_x(geom) as bcalbers_x, \
+			  st_y(geom) as bcalbers_y \
+			from temp.fiss_density_pts" > $@
+
+
+
+../data/barriers.csv: sql/barriers.sql
+	psql2csv $(DATABASE_URL) < sql/barriers.sql > ../data/barriers.csv
+
+../data/fiss_density_watersheds.geojson: fiss_density_pts.geojson
+	$(PSQL_CMD) -f sql/04_fiss_density_watersheds.sql
 	ogr2ogr -f GeoJSON $@ -a_srs EPSG:3005 \
 	"PG:$(DATABASE_URL?application_name=foo)" \
 	-sql "SELECT \
         fiss_density_watersheds_id, \
+        fiss_density_distinct_ids, \
         ST_Multi(ST_SimplifyPreserveTopology(geom, 20))::geometry(MultiPolygon, 3005) as geom \
       FROM \
       temp.fiss_density_watersheds"
@@ -43,7 +72,7 @@ fiss_density_watersheds.geojson: fiss_density_pts.geojson
 #     jq -r --slurp '.[] | @csv' > $@
 
 # elevation
-elev.csv: fiss_density_watersheds.geojson
+../data/elev.csv: fiss_density_watersheds.geojson
 	fio cat $< | parallel \
 	  --pipe \
 	  "rio -q zonalstats \
@@ -52,11 +81,11 @@ elev.csv: fiss_density_watersheds.geojson
 	    2>/dev/null" | \
 	jq '.features[].properties | [.fiss_density_watersheds_id, .elev_min, .elev_max, .elev_mean]' | \
 	jq -r --slurp '.[] | @csv' > $@
-	gsed  -i 'fiss_density_watersheds_id,elev_min,elev_max,elev_mean' elev.csv
+	#gsed  -i 'fiss_density_watersheds_id,elev_min,elev_max,elev_mean' $@
 
 # bec zones
-bec.csv: fiss_density_watersheds.geojson
-	psql -v ON_ERROR_STOP=1 -f sql/04_fiss_density_watersheds_bec.sql
+../data/bec.csv: fiss_density_watersheds.geojson
+	$(PSQL_CMD) -f sql/04_fiss_density_watersheds_bec.sql
 	psql2csv "SELECT * FROM temp.fiss_density_watersheds_bec" > $@
 
 clean:

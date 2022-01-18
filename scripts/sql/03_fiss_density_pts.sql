@@ -76,36 +76,71 @@ records_to_retain AS
     a.stream_order,
     a.distance_to_stream,
     a.watershed_group_code,
-    b.density_ids
+    b.fiss_density_ids
   FROM closest_within_50_and_100 a
   INNER JOIN temp.fiss_density_distinct b
   ON a.fiss_density_distinct_id = b.fiss_density_distinct_id
   WHERE other_id IS NULL
   OR (distance_to_stream < 10 and other_dist >= 60)
   OR ABS(other_dist - distance_to_stream) >= 80
-)
+),
 
 -- join back to source table, add basic stream info, create geoms
+pts as
+(
+  SELECT DISTINCT ON (a.fiss_density_distinct_id)
+    a.fiss_density_distinct_id,
+    a.fiss_density_ids,
+    a.linear_feature_id,
+    a.blue_line_key,
+    a.downstream_route_measure,
+    s.wscode_ltree,
+    s.localcode_ltree,
+    a.watershed_group_code,
+    a.distance_to_stream,
+    postgisftw.FWA_LocateAlong(a.blue_line_key, a.downstream_route_measure)::geometry(PointZM, 3005) as geom
+  FROM records_to_retain a
+  INNER JOIN whse_basemapping.fwa_stream_networks_sp s
+  ON a.linear_feature_id = s.linear_feature_id
+  ORDER BY a.fiss_density_distinct_id
+),
 
-SELECT DISTINCT ON (a.fiss_density_distinct_id)
-  --b.fiss_density_id,
+
+-- find order of parent stream
+parent_order AS
+(
+  SELECT DISTINCT ON (a.fiss_density_distinct_id)
+    a.fiss_density_distinct_id,
+    p.stream_order as stream_order_parent
+  from pts a
+  left outer join whse_basemapping.fwa_stream_networks_sp p
+  on a.wscode_ltree = p.localcode_ltree
+  where p.blue_line_key = p.watershed_key
+  order by a.fiss_density_distinct_id, p.downstream_route_measure desc
+)
+
+SELECT
   a.fiss_density_distinct_id,
+  a.fiss_density_ids,
   a.linear_feature_id,
   a.blue_line_key,
   a.downstream_route_measure,
+  s.wscode_ltree,
+  s.localcode_ltree,
   a.watershed_group_code,
   a.distance_to_stream,
   s.stream_order,
+  b.stream_order_parent,
   s.stream_magnitude,
+  s.gradient,
   p.map,
   p.map_upstream,
+  ua.upstream_area_ha,
+  cw.channel_width,
+  cw.channel_width_source,
   d.mad_m3s,
-  s.wscode_ltree,
-  s.localcode_ltree,
-  FWA_LocateAlong(a.blue_line_key, a.downstream_route_measure)::geometry(PointZM, 3005) as geom
-FROM records_to_retain a
---INNER JOIN temp.fiss_density b
---ON b.fiss_density_id = ANY (a.density_ids)
+  a.geom
+FROM pts a
 LEFT OUTER JOIN bcfishpass.discharge_pcic d
 ON a.linear_feature_id = d.linear_feature_id
 INNER JOIN whse_basemapping.fwa_stream_networks_sp s
@@ -113,4 +148,11 @@ ON a.linear_feature_id = s.linear_feature_id
 LEFT OUTER JOIN bcfishpass.mean_annual_precip p
 ON s.wscode_ltree = p.wscode_ltree
 AND s.localcode_ltree = p.localcode_ltree
-ORDER BY a.fiss_density_distinct_id;
+LEFT OUTER JOIN parent_order b
+ON a.fiss_density_distinct_id = b.fiss_density_distinct_id
+LEFT OUTER JOIN bcfishpass.channel_width cw
+ON a.linear_feature_id = cw.linear_feature_id
+LEFT OUTER JOIN whse_basemapping.fwa_streams_watersheds_lut l
+ON s.linear_feature_id = l.linear_feature_id
+INNER JOIN whse_basemapping.fwa_watersheds_upstream_area ua
+ON l.watershed_feature_id = ua.watershed_feature_id;
