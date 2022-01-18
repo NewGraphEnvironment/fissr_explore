@@ -20,8 +20,8 @@ all: $(GENERATED_FILES)
 	psql2csv $(DATABASE_URL) "SELECT fiss_density_distinct_id, fiss_density_ids FROM temp.fiss_density_distinct" > $@
 
 ../data/fiss_density_pts.csv: ../data/fiss_density_distinct.csv sql/02_fiss_density_events.sql sql/03_fiss_density_pts.sql
-	#$(PSQL_CMD) -f sql/02_fiss_density_events.sql # join source locations to all streams within 200m (don't bother dumping)
-	#$(PSQL_CMD) -f sql/03_fiss_density_pts.sql    # join source locations to best guess matching stream, add additional info
+	$(PSQL_CMD) -f sql/02_fiss_density_events.sql # join source locations to all streams within 200m (don't bother dumping)
+	$(PSQL_CMD) -f sql/03_fiss_density_pts.sql    # join source locations to best guess matching stream, add additional info
 	psql2csv $(DATABASE_URL) "SELECT \
 			  fiss_density_distinct_id, \
 			  fiss_density_ids, \
@@ -38,14 +38,15 @@ all: $(GENERATED_FILES)
 			  mad_m3s, \
 			  st_x(geom) as bcalbers_x, \
 			  st_y(geom) as bcalbers_y \
-			from temp.fiss_density_pts" > $@
+			from temp.fiss_density_pts \
+			order by fiss_density_distinct_id" > $@
 
 
 
 ../data/barriers.csv: sql/barriers.sql
 	psql2csv $(DATABASE_URL) < sql/barriers.sql > ../data/barriers.csv
 
-../data/fiss_density_watersheds.geojson: fiss_density_pts.geojson
+../data/fiss_density_watersheds.geojson: ../data/fiss_density_pts.csv
 	$(PSQL_CMD) -f sql/04_fiss_density_watersheds.sql
 	ogr2ogr -f GeoJSON $@ -a_srs EPSG:3005 \
 	"PG:$(DATABASE_URL?application_name=foo)" \
@@ -72,16 +73,17 @@ all: $(GENERATED_FILES)
 #     jq -r --slurp '.[] | @csv' > $@
 
 # elevation
-../data/elev.csv: fiss_density_watersheds.geojson
+../data/elev.csv: ../data/fiss_density_watersheds.geojson
 	fio cat $< | parallel \
 	  --pipe \
 	  "rio -q zonalstats \
 	    -r ~/data/bc/raster/dem/bc_dem.tif \
 	    --prefix 'elev_' \
+	    --stats 'min max mean percentile_60' \
 	    2>/dev/null" | \
-	jq '.features[].properties | [.fiss_density_watersheds_id, .elev_min, .elev_max, .elev_mean]' | \
+	jq '.features[].properties | [.fiss_density_watersheds_id, .elev_min, .elev_max, .elev_mean, .elev_percentile_60]' | \
 	jq -r --slurp '.[] | @csv' > $@
-	#gsed  -i 'fiss_density_watersheds_id,elev_min,elev_max,elev_mean' $@
+	gsed -i '1i fiss_density_watersheds_id,elev_min,elev_max,elev_mean,elev_percentile_60' $@
 
 # bec zones
 ../data/bec.csv: fiss_density_watersheds.geojson

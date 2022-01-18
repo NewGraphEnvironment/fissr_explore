@@ -124,6 +124,8 @@ SELECT
   a.fiss_density_ids,
   a.linear_feature_id,
   a.blue_line_key,
+  s.edge_type,
+  et.edge_description,
   a.downstream_route_measure,
   s.wscode_ltree,
   s.localcode_ltree,
@@ -136,7 +138,12 @@ SELECT
   p.map,
   p.map_upstream,
   ua.upstream_area_ha,
-  cw.channel_width,
+  -- cw.channel_width,
+  case when cw.channel_width_source = 'MODELLED'
+    -- recalculate cw model based on included upstream area & precip just in case there is any imprecsison in the join
+    -- (any imprecision in the join will be unimportant, but for QA review we want model output based exactly on inputs included in this dump)
+    then round(exp(0.3071300 + 0.4577882 * (ln(ua.upstream_area_ha) + ln(coalesce(p.map_upstream, 0) + 1) - ln(100) - ln(1000)))::numeric, 2)
+     else cw.channel_width end as channel_width,
   cw.channel_width_source,
   d.mad_m3s,
   a.geom
@@ -145,6 +152,8 @@ LEFT OUTER JOIN bcfishpass.discharge_pcic d
 ON a.linear_feature_id = d.linear_feature_id
 INNER JOIN whse_basemapping.fwa_stream_networks_sp s
 ON a.linear_feature_id = s.linear_feature_id
+inner join whse_basemapping.fwa_edge_type_codes et
+on s.edge_type = et.edge_type
 LEFT OUTER JOIN bcfishpass.mean_annual_precip p
 ON s.wscode_ltree = p.wscode_ltree
 AND s.localcode_ltree = p.localcode_ltree
@@ -155,4 +164,5 @@ ON a.linear_feature_id = cw.linear_feature_id
 LEFT OUTER JOIN whse_basemapping.fwa_streams_watersheds_lut l
 ON s.linear_feature_id = l.linear_feature_id
 INNER JOIN whse_basemapping.fwa_watersheds_upstream_area ua
-ON l.watershed_feature_id = ua.watershed_feature_id;
+ON l.watershed_feature_id = ua.watershed_feature_id
+order by a.fiss_density_distinct_id;
