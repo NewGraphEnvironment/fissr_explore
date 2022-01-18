@@ -35,8 +35,8 @@ bDischarge_21b <- 0.4577882
 fiss_density_pts_cw <- fiss_density_pts %>%
   mutate(
     upstream_area_km = upstream_area_ha/100,
-    map_upstream_m = map_upstream/1000,
-    map_upstream_2021 = map_upstream/10,  ##not sure why this is only divided by 10.... Should look at poisson code
+    map_upstream_m = map_upstream/1000, ##convert mm to m
+    map_upstream_2021 = map_upstream/10,  ##this was divided by 10 in the poisson code https://github.com/poissonconsulting/channel-width-21/blob/main/clean-data.R
     cw_modelled_21 = exp(b0_21 + (bArea_21 * log(upstream_area_km))  + (bPrecipitation_21 * log(map_upstream_2021))),
     cw_modelled_21b = exp(b0_21b + bDischarge_21b * (log(upstream_area_km) + log(map_upstream_m)))
   )
