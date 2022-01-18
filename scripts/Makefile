@@ -17,15 +17,30 @@ all: $(GENERATED_FILES)
 
 ../data/fiss_density_distinct.csv: .fiss_density sql/01_fiss_density_distinct.sql
 	$(PSQL_CMD) -f sql/01_fiss_density_distinct.sql
-	psql2csv "SELECT fiss_density_distinct_id, fiss_density_ids FROM temp.fiss_density_distinct" > $@
+	psql2csv $(DATABASE_URL) "SELECT fiss_density_distinct_id, fiss_density_ids FROM temp.fiss_density_distinct" > $@
 
 ../data/fiss_density_pts.csv: ../data/fiss_density_distinct.csv sql/02_fiss_density_events.sql sql/03_fiss_density_pts.sql
-	$(PSQL_CMD) -f sql/02_fiss_density_events.sql # join source locations to all streams within 200m (don't bother dumping)
-	$(PSQL_CMD) -f sql/03_fiss_density_pts.sql    # join source locations to best guess matching stream
-	$(PSQL_CMD) -f sql/04_pt_report.sql           # get additional info about the points
-	#ogr2ogr -f GeoJSON $@ -a_srs EPSG:3005 \
-	#"PG:$(DATABASE_URL?application_name=foo)" \
-	#-sql "SELECT * FROM temp.fiss_density_pts"
+	#$(PSQL_CMD) -f sql/02_fiss_density_events.sql # join source locations to all streams within 200m (don't bother dumping)
+	#$(PSQL_CMD) -f sql/03_fiss_density_pts.sql    # join source locations to best guess matching stream, add additional info
+	psql2csv $(DATABASE_URL) "SELECT \
+			  fiss_density_distinct_id, \
+			  fiss_density_ids, \
+			  distance_to_stream, \
+			  stream_order, \
+			  stream_order_parent, \
+			  stream_magnitude, \
+			  gradient, \
+			  map, \
+			  map_upstream, \
+			  upstream_area_ha, \
+			  channel_width, \
+			  channel_width_source, \
+			  mad_m3s, \
+			  st_x(geom) as bcalbers_x, \
+			  st_y(geom) as bcalbers_y \
+			from temp.fiss_density_pts" > $@
+
+
 
 ../data/barriers.csv: sql/barriers.sql
 	psql2csv $(DATABASE_URL) < sql/barriers.sql > ../data/barriers.csv
