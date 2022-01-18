@@ -46,7 +46,7 @@ all: $(GENERATED_FILES)
 ../data/barriers.csv: sql/barriers.sql
 	psql2csv $(DATABASE_URL) < sql/barriers.sql > ../data/barriers.csv
 
-../data/fiss_density_watersheds.geojson: fiss_density_pts.geojson
+../data/fiss_density_watersheds.geojson: ../data/fiss_density_pts.csv
 	$(PSQL_CMD) -f sql/04_fiss_density_watersheds.sql
 	ogr2ogr -f GeoJSON $@ -a_srs EPSG:3005 \
 	"PG:$(DATABASE_URL?application_name=foo)" \
@@ -73,16 +73,17 @@ all: $(GENERATED_FILES)
 #     jq -r --slurp '.[] | @csv' > $@
 
 # elevation
-../data/elev.csv: fiss_density_watersheds.geojson
+../data/elev.csv: ../data/fiss_density_watersheds.geojson
 	fio cat $< | parallel \
 	  --pipe \
 	  "rio -q zonalstats \
 	    -r ~/data/bc/raster/dem/bc_dem.tif \
 	    --prefix 'elev_' \
+	    --stats 'min max mean percentile_60' \
 	    2>/dev/null" | \
-	jq '.features[].properties | [.fiss_density_watersheds_id, .elev_min, .elev_max, .elev_mean]' | \
+	jq '.features[].properties | [.fiss_density_watersheds_id, .elev_min, .elev_max, .elev_mean, .elev_percentile_60]' | \
 	jq -r --slurp '.[] | @csv' > $@
-	#gsed  -i 'fiss_density_watersheds_id,elev_min,elev_max,elev_mean' $@
+	gsed -i '1i fiss_density_watersheds_id,elev_min,elev_max,elev_mean,elev_percentile_60' $@
 
 # bec zones
 ../data/bec.csv: fiss_density_watersheds.geojson
