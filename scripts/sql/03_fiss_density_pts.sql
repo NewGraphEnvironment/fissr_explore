@@ -136,7 +136,12 @@ SELECT
   p.map,
   p.map_upstream,
   ua.upstream_area_ha,
-  cw.channel_width,
+  -- cw.channel_width,
+  case when cw.channel_width_source = 'MODELLED'
+    -- recalculate cw model based on included upstream area & precip just in case there is any imprecsison in the join
+    -- (any imprecision in the join will be unimportant, but for QA review we want model output based exactly on inputs included in this dump)
+    then round(exp(0.3071300 + 0.4577882 * (ln(ua.upstream_area_ha) + ln(coalesce(p.map_upstream, 0) + 1) - ln(100) - ln(1000)))::numeric, 2)
+     else cw.channel_width end as channel_width,
   cw.channel_width_source,
   d.mad_m3s,
   a.geom

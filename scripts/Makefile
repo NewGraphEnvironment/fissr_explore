@@ -20,8 +20,8 @@ all: $(GENERATED_FILES)
 	psql2csv $(DATABASE_URL) "SELECT fiss_density_distinct_id, fiss_density_ids FROM temp.fiss_density_distinct" > $@
 
 ../data/fiss_density_pts.csv: ../data/fiss_density_distinct.csv sql/02_fiss_density_events.sql sql/03_fiss_density_pts.sql
-	#$(PSQL_CMD) -f sql/02_fiss_density_events.sql # join source locations to all streams within 200m (don't bother dumping)
-	#$(PSQL_CMD) -f sql/03_fiss_density_pts.sql    # join source locations to best guess matching stream, add additional info
+	$(PSQL_CMD) -f sql/02_fiss_density_events.sql # join source locations to all streams within 200m (don't bother dumping)
+	$(PSQL_CMD) -f sql/03_fiss_density_pts.sql    # join source locations to best guess matching stream, add additional info
 	psql2csv $(DATABASE_URL) "SELECT \
 			  fiss_density_distinct_id, \
 			  fiss_density_ids, \
