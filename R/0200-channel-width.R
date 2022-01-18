@@ -41,9 +41,21 @@ fiss_density_pts_cw <- fiss_density_pts %>%
     cw_modelled_21b = exp(b0_21b + bDischarge_21b * (log(upstream_area_km) + log(map_upstream_m)))
   )
 
-fiss_density_pts_cw_compare <- fiss_density_pts_cw
-    dplyr::relocate(c(channel_width, channel_width_source), .after = cw_modelled_21b)) %>%
-  filter(channel_width_source %ilike% 'Field')
+fiss_density_pts_cw_compare <- fiss_density_pts_cw %>%
+    dplyr::relocate(c(channel_width, channel_width_source), .after = cw_modelled_21b) %>%
+  mutate(cw_diff21_perc = abs((cw_modelled_21 - channel_width)/channel_width) * 100,
+         cw_diff21b_perc = abs((cw_modelled_21b - channel_width)/channel_width) * 100)
+
+fiss_density_pts_cw_compare_measured <- fiss_density_pts_cw_compare %>%
+  filter(channel_width_source %ilike% 'Field' & upstream_area_km < 100)
+
+
+fiss_density_pts_cw_compare_measured_sum <- fiss_density_pts_cw_compare_measured %>%
+  summarise(cw_diff21_mean = mean(cw_diff21_perc, na.rm = T),
+            cw_diff21_median = median(cw_diff21_perc, na.rm = T),
+            cw_diff21b_mean = mean(cw_diff21b_perc, na.rm = T),
+            cw_diff21b_median = median(cw_diff21b_perc, na.rm = T))
+
 
 ##burn at csv of the values so we can compare to sql
 fiss_density_pts_cw %>%
