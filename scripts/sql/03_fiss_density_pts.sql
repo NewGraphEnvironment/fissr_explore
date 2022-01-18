@@ -124,6 +124,8 @@ SELECT
   a.fiss_density_ids,
   a.linear_feature_id,
   a.blue_line_key,
+  s.edge_type,
+  et.edge_description,
   a.downstream_route_measure,
   s.wscode_ltree,
   s.localcode_ltree,
@@ -150,6 +152,8 @@ LEFT OUTER JOIN bcfishpass.discharge_pcic d
 ON a.linear_feature_id = d.linear_feature_id
 INNER JOIN whse_basemapping.fwa_stream_networks_sp s
 ON a.linear_feature_id = s.linear_feature_id
+inner join whse_basemapping.fwa_edge_type_codes et
+on s.edge_type = et.edge_type
 LEFT OUTER JOIN bcfishpass.mean_annual_precip p
 ON s.wscode_ltree = p.wscode_ltree
 AND s.localcode_ltree = p.localcode_ltree
