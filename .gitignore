@@ -7,3 +7,4 @@ _bookdown_files
 rsconnect
 
 R/private_info.R
+data/fiss_density_watersheds.geojson
