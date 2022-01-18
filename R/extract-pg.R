@@ -1,14 +1,16 @@
+##here are just some examples of postgres queries
+
 source('R/packages.R')
 
 
 
 conn <- DBI::dbConnect(
   RPostgres::Postgres(),
-  dbname = "postgis",
-  host = "localhost",
-  port = "5432",
-  user = "postgres",
-  password = "postgres"
+  dbname = dbname_wsl,
+  host = host_wsl,
+  port = port_wsl,
+  user = user_wsl,
+  password = password_wsl
 )
 
 
