@@ -54,6 +54,7 @@ compare_modelled <- fiss_density_pts_cw_compare %>%
 
 
 compare_measured_sum <- compare_measured %>%
+  filter(!is.na(cw_diff21_perc) | !is.na(cw_diff21b_perc)) %>% #not sure why
   summarise(cw_diff21_mean = mean(cw_diff21_perc, na.rm = T),
             cw_diff21_median = median(cw_diff21_perc, na.rm = T),
             cw_diff21b_mean = mean(cw_diff21b_perc, na.rm = T),
@@ -64,6 +65,7 @@ compare_modelled_sum <- compare_modelled %>%
             cw_diff21_median = median(cw_diff21_perc, na.rm = T),
             cw_diff21b_mean = mean(cw_diff21b_perc, na.rm = T),
             cw_diff21b_median = median(cw_diff21b_perc, na.rm = T))
+
 
 
 ##burn at csv of the values so we can compare to sql
