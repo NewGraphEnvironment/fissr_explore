@@ -27,10 +27,9 @@ Future considerations:
 
 # Requirements
 
-- fwapg
+- fwapg (postgres/postgis/gdal/etc)
 - bcfishpass
 - csvsql
-- psql2csv
 - rasterstats
 - jq
 - BC DEM tif on local drive
