@@ -15,39 +15,43 @@ all: $(GENERATED_FILES)
 	csvsql --db $(DATABASE_URL) --table fiss_density --insert $< --db-schema temp
 	touch $@
 
-../data/fiss_density_distinct.csv: .fiss_density sql/01_fiss_density_distinct.sql
+../data/fiss_density_pts.geojson:
 	$(PSQL_CMD) -f sql/01_fiss_density_distinct.sql
-	psql2csv $(DATABASE_URL) "SELECT fiss_density_distinct_id, fiss_density_ids FROM temp.fiss_density_distinct" > $@
+	$(PSQL_CMD) -f sql/02_fiss_density_events.sql   # join source locations to all streams within 200m (don't bother dumping)
+	$(PSQL_CMD) -f sql/03_fiss_density_pts.sql      # join source locations to best guess matching stream, add additional info
+	$(PSQL_CMD) -f sql/04_fiss_density_barriers.sql # report on barriers downstream of points
+	ogr2ogr -f GeoJSON $@ -a_srs EPSG:3005 \
+		"PG:$(DATABASE_URL)?application_name=foo" \
+		-sql "SELECT \
+			a.fiss_density_ids, \
+			a.distance_to_stream, \
+			a.stream_order, \
+			a.stream_order_parent, \
+			a.stream_magnitude, \
+			a.gradient, \
+			a.map, \
+			a.map_upstream, \
+			a.upstream_area_ha, \
+			a.channel_width, \
+			a.channel_width_source, \
+			a.mad_m3s, \
+			b.barriers_majordams_dnstr, \
+			b.barriers_falls_dnstr, \
+			b.barriers_subsurfaceflow_dnstr, \
+			b.barriers_gradient_dnstr, \
+			b.barriers_anthropogenic_dnstr, \
+			b.barriers_pscis_dnstr, \
+			b.all_pscis_dnstr, \
+			b.all_pscis_scores_dnstr, \
+			a.geom \
+			from temp.fiss_density_pts a \
+			left outer join temp.fiss_density_barriers b \
+			on a.fiss_density_distinct_id = b.fiss_density_distinct_id \
+			order by fiss_density_ids"
 
-../data/fiss_density_pts.csv: ../data/fiss_density_distinct.csv sql/02_fiss_density_events.sql sql/03_fiss_density_pts.sql
-	$(PSQL_CMD) -f sql/02_fiss_density_events.sql # join source locations to all streams within 200m (don't bother dumping)
-	$(PSQL_CMD) -f sql/03_fiss_density_pts.sql    # join source locations to best guess matching stream, add additional info
-	psql2csv $(DATABASE_URL) "SELECT \
-			  fiss_density_distinct_id, \
-			  fiss_density_ids, \
-			  distance_to_stream, \
-			  stream_order, \
-			  stream_order_parent, \
-			  stream_magnitude, \
-			  gradient, \
-			  map, \
-			  map_upstream, \
-			  upstream_area_ha, \
-			  channel_width, \
-			  channel_width_source, \
-			  mad_m3s, \
-			  st_x(geom) as bcalbers_x, \
-			  st_y(geom) as bcalbers_y \
-			from temp.fiss_density_pts \
-			order by fiss_density_distinct_id" > $@
-
-
-
-../data/barriers.csv: sql/barriers.sql
-	psql2csv $(DATABASE_URL) < sql/barriers.sql > ../data/barriers.csv
 
 ../data/fiss_density_watersheds.geojson: ../data/fiss_density_pts.csv
-	$(PSQL_CMD) -f sql/04_fiss_density_watersheds.sql
+	$(PSQL_CMD) -f sql/05_fiss_density_watersheds.sql
 	ogr2ogr -f GeoJSON $@ -a_srs EPSG:3005 \
 	"PG:$(DATABASE_URL?application_name=foo)" \
 	-sql "SELECT \
@@ -86,9 +90,9 @@ all: $(GENERATED_FILES)
 	gsed -i '1i fiss_density_watersheds_id,elev_min,elev_max,elev_mean,elev_percentile_60' $@
 
 # bec zones
-../data/bec.csv: fiss_density_watersheds.geojson
-	$(PSQL_CMD) -f sql/04_fiss_density_watersheds_bec.sql
-	psql2csv "SELECT * FROM temp.fiss_density_watersheds_bec" > $@
+#../data/bec.csv: fiss_density_watersheds.geojson
+#	$(PSQL_CMD) -f sql/06_fiss_density_watersheds_bec.sql
+#	psql2csv "SELECT * FROM temp.fiss_density_watersheds_bec" > $@
 
 clean:
 	rm -Rf $(GENERATED_FILES)
