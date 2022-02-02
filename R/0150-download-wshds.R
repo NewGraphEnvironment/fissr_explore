@@ -9,7 +9,7 @@ wshds <- sf::read_sf('https://www.hillcrestgeo.ca/outgoing/public/fiss_density_w
 
 wshds_df <- wshds %>%
   sf::st_drop_geometry() %>%
-  unnest(fiss_density_distinct_ids)
+  unnest(fiss_density_ids)
 
 
 ##burn the df as a csv to make easy connections later on.
