@@ -1,13 +1,14 @@
 density_pts <- sf::read_sf('data/fiss_density_pts.geojson') %>%
   unnest(fiss_density_ids)
 
+
+density <- readr::read_csv('data/fiss_density.csv')
+
+
+##there are full on duplicates of everything in that file but then the number of distinct rows is not the same as the number of fiss_density_ids
 density_pts %>%
   distinct(fiss_density_ids) %>%
   dim()
-
-
-
-density <- readr::read_csv('data/fiss_density.csv')
 
 
 ##we want to confirm that the duplicate sites (diff species at same site) were run through sql scripts and that we do not need to rejoin outputs somehow
