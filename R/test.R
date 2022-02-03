@@ -18,28 +18,25 @@ density_dups <- density %>%
   filter(dup == T)
   # distinct(key, .keep_all = T)
 
-##grab some examples of dups to view
-dups_ex <- density_dups %>%
-  head()
+##hmm - looks like multiple species were run through the sql
 
-##556 and 557 are example
-test <- density_pts %>% select(fiss_density_ids)
+
+##explore distinct events for each of the columns of fiss_density_pts.geojson
 
 names_density_pts <- names(density_pts)
 
+##build function to test
 test_dim <- function(test_var){
-  # test_var <- enquo(test_var)
   density_pts %>%
     distinct(!! sym(test_var)) %>%
     dim()
 }
 
+
+##make a dataframe with results for all columns
 test <- names_density_pts %>%
   map(test_dim) %>%
   purrr::set_names(nm = names_density_pts) %>%
   bind_rows()
 
-density_pts %>%
-  distinct(fiss_density_ids) %>%
-  dim()
 
