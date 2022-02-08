@@ -57,19 +57,13 @@ all: $(GENERATED_FILES)
 		from \
 		( select \
 			fiss_density_watersheds_id, \
-			array_to_string(fiss_density_ids, ';') as fiss_density_ids, \
+			fiss_density_ids, \
 			st_multi(st_simplifypreservetopology(geom, 20))::geometry(multipolygon, 3005) as geom \
 		from temp.fiss_density_watersheds \
-		) as t" > ../data/t.geojson
-	# run rasterstats per feature
-	fio cat ../data/t.geojson | \
-		rio -q zonalstats \
-		-r ~/data/bc/raster/dem/bc_dem.tif \
-		--prefix 'elev_' \
-		--stats 'min max mean percentile_60' > $@
-	# remove temp file
-	rm ../data/t.geojson
-
+		) as t" | rio -q zonalstats \
+			-r ~/data/bc/raster/dem/bc_dem.tif \
+			--prefix 'elev_' \
+			--stats 'min max mean percentile_60' > $@
 
 # precipitation
 # map.csv: fiss_density_watersheds.geojson
