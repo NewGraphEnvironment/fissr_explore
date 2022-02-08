@@ -50,8 +50,8 @@ all: $(GENERATED_FILES)
 			order by fiss_density_ids"
 
 ../data/fiss_density_watersheds.geojson: ../data/fiss_density_pts.geojson
-	#$(PSQL_CMD) -f sql/05_fiss_density_watersheds.sql  # create watersheds
-	# dump to geojson and overlay with elevation raster
+	$(PSQL_CMD) -f sql/05_fiss_density_watersheds.sql  # create watersheds
+	# dump to temp geojson file
 	$(PSQL_CMD) -Xt <<< "select \
 		st_asgeojson(t.*) \
 		from \
@@ -60,15 +60,10 @@ all: $(GENERATED_FILES)
 			fiss_density_ids, \
 			st_multi(st_simplifypreservetopology(geom, 20))::geometry(multipolygon, 3005) as geom \
 		from temp.fiss_density_watersheds \
-		) as t" | \
-	parallel \
-		--pipe \
-		"rio -q zonalstats \
+		) as t" | rio -q zonalstats \
 			-r ~/data/bc/raster/dem/bc_dem.tif \
 			--prefix 'elev_' \
-			--stats 'min max mean percentile_60' \
-			2>/dev/null" > $@
-
+			--stats 'min max mean percentile_60' > $@
 
 # precipitation
 # map.csv: fiss_density_watersheds.geojson
