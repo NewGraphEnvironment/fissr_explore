@@ -33,7 +33,6 @@ test_dim <- function(test_var){
     dim()
 }
 
-
 ##make a dataframe with results for all columns
 test <- names_density_pts %>%
   map(test_dim) %>%
