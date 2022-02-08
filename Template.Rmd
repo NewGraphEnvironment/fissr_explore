@@ -105,7 +105,7 @@ Through this work and numerous other initiatives [Simon Norris](https://github.c
 
 <br>
 
-Watersheds geojson [here](https://www.hillcrestgeo.ca/outgoing/public/fiss_density_watersheds.geojson).  Scripts to clean up the data pulled from the province are [here](https://github.com/NewGraphEnvironment/fissr_explore/tree/master/R) and scripts to tie this tidied data to measured as well as remotely sensed habitat characteristics are [here](github.com/NewGraphEnvironment/fissr_explore/tree/master/scripts).
+Watersheds geojson [here](https://www.hillcrestgeo.ca/outgoing/public/fiss_density_watersheds.geojson).  Scripts to clean up the data pulled from the province are [here](https://github.com/NewGraphEnvironment/fissr_explore/tree/master/R) and scripts to tie this tidied data to measured as well as remotely sensed habitat characteristics are [here](https://github.com/NewGraphEnvironment/fissr_explore/tree/master/scripts).
 
 <br>
 
