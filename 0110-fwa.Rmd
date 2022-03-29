@@ -5,6 +5,9 @@ Purpose of this section was to explore the lengths and frequencies of double lin
 
 
 Load the double line streams used in channel_width_mapped.  In order to facilitate reproducability lets save the streams in a sqlite and pull them back in.
+```{r}
+shared_dropbox_dir <- "C:/Users/al/Dropbox/New Graph/"
+```
 
 
 ```{r eval=FALSE}
@@ -34,9 +37,7 @@ streams <- sf::st_read(conn, query = q)
 
 ##  the streams in a sqlite and pull them back in.
 ##########################!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!#########################
-###change this up so that it matches your version of the ahred dropbox!
-
-
+###change this up so that it matches your version of the shared dropbox!
 
 
 mydb <- DBI::dbConnect(RSQLite::SQLite(), paste0(shared_dropbox_dir, "fiss/fissr_explore.sqlite"))
@@ -52,12 +53,6 @@ readwritesqlite::rws_disconnect(conn)
 
 ```
 
-```{r}
-
-
-
-shared_dropbox_dir <- "C:/Users/al/Dropbox/New Graph/"
-```
 
 
 Load the streams from sqlite.  The table I pull back in after saving as `sqlite` has `linear_feature_id` as integer vs int64 as it was pulled from `postgres`. No issues for this exercise though...
